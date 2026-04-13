@@ -1,6 +1,7 @@
 var allData = [];
 var currentData = [];
 var currentMeta = null;
+var currentSourceId = null;
 var chartTrend = null, chartStructure = null;
 var currentSortKey = 'engage', currentSortBtn = null;
 
@@ -23,6 +24,7 @@ function loadSource(sourceId) {
   var src = XHS_SOURCES.find(function(s){ return s.id === sourceId; });
   if (!src) return;
 
+  currentSourceId = sourceId;
   allData = window[src.dataVar];
   currentMeta = window[src.metaVar] || null;
 
@@ -176,7 +178,7 @@ function render() {
   renderProfileTags(currentMeta);
 
   // 成长趋势折线图
-  renderGrowthChart(currentSource);
+  renderGrowthChart(currentSourceId);
 
   // 图表1: 互动量趋势（堆叠柱状图）
   var sorted = data.slice().sort(function(a,b){ return a.date.localeCompare(b.date); });
