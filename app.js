@@ -175,6 +175,9 @@ function render() {
   // 账号画像标签
   renderProfileTags(currentMeta);
 
+  // 成长趋势折线图
+  renderGrowthChart(currentSource);
+
   // 图表1: 互动量趋势（堆叠柱状图）
   var sorted = data.slice().sort(function(a,b){ return a.date.localeCompare(b.date); });
   var labels = sorted.map(function(d){ return d.date.slice(5); });
@@ -348,4 +351,126 @@ function renderProfileTags(meta) {
 
   container.innerHTML = html;
   footer.textContent = '打标时间：' + (t.tagged_at || '未知') + '  ·  由 GLM + 量化指标自动生成';
+}
+
+// ─── Tab 切换 ────────────────────────────────────────────────
+function switchChartTab(tab, btn) {
+  // 切换按钮状态
+  document.querySelectorAll('.chart-tab').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+  // 切换内容
+  ['growth','trend','structure'].forEach(function(t) {
+    document.getElementById('tab-' + t).style.display = (t === tab) ? '' : 'none';
+  });
+}
+
+// ─── 成长趋势折线图 ──────────────────────────────────────────
+var growthChart = null;
+
+function renderGrowthChart(sourceId) {
+  // 找到对应的 history 变量
+  var src = XHS_SOURCES.find(function(s) { return s.id === sourceId; });
+  if (!src) return;
+
+  var histVar = src.metaVar.replace('_META', '_HISTORY');  // e.g. LIANGKEBAN_HISTORY
+  var history = window[histVar];
+
+  var ctx = document.getElementById('chart-growth');
+  if (!ctx) return;
+
+  if (growthChart) { growthChart.destroy(); growthChart = null; }
+
+  if (!history || history.length === 0) {
+    ctx.parentNode.innerHTML = '<div style="color:#555;font-size:13px;text-align:center;padding:60px 0">暂无历史数据，下次刷新后开始记录</div>';
+    document.getElementById('growth-legend').innerHTML = '';
+    return;
+  }
+
+  var labels = history.map(function(h) { return h.date; });
+
+  // 4条折线，每条单独归一化（显示相对变化趋势，避免数量级差异）
+  var series = [
+    { key: 'fans',      label: '粉丝数',    color: '#3b82f6' },
+    { key: 'liked',     label: '累计获赞',   color: '#f59e0b' },
+    { key: 'collected', label: '累计收藏',   color: '#10b981' },
+    { key: 'notes',     label: '笔记总数',   color: '#a855f7' },
+  ];
+
+  // 只有一条数据时提示
+  if (history.length === 1) {
+    var singleInfo = series.map(function(s) {
+      return s.label + ': ' + history[0][s.key];
+    }).join('　');
+    document.getElementById('growth-legend').innerHTML =
+      '<div style="color:#555;font-size:12px;text-align:center;width:100%">当前仅有起点数据（' + history[0].date + '）· ' + singleInfo + '<br>每周刷新后将展示成长曲线</div>';
+  } else {
+    document.getElementById('growth-legend').innerHTML = '';
+  }
+
+  var datasets = series.map(function(s) {
+    var values = history.map(function(h) { return h[s.key] || 0; });
+    return {
+      label: s.label,
+      data: values,
+      borderColor: s.color,
+      backgroundColor: s.color + '22',
+      borderWidth: 2,
+      pointRadius: history.length === 1 ? 5 : 3,
+      pointHoverRadius: 6,
+      tension: 0.3,
+      fill: false,
+      yAxisID: s.key === 'notes' ? 'y2' : 'y1',  // 笔记数用右轴，其他用左轴
+    };
+  });
+
+  growthChart = new Chart(ctx, {
+    type: 'line',
+    data: { labels: labels, datasets: datasets },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { display: false },  // 用自定义图例
+        tooltip: {
+          backgroundColor: '#1e1e1e',
+          borderColor: '#333',
+          borderWidth: 1,
+          titleColor: '#ccc',
+          bodyColor: '#aaa',
+          callbacks: {
+            label: function(ctx) {
+              return ctx.dataset.label + ': ' + ctx.parsed.y.toLocaleString();
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          ticks: { color: '#555', font: { size: 11 }, maxTicksLimit: 8 },
+          grid: { color: '#1e1e1e' }
+        },
+        y1: {
+          type: 'linear', position: 'left',
+          ticks: { color: '#555', font: { size: 11 },
+            callback: function(v) { return v >= 10000 ? (v/10000).toFixed(1)+'w' : v; }
+          },
+          grid: { color: '#1e1e1e' }
+        },
+        y2: {
+          type: 'linear', position: 'right',
+          ticks: { color: '#a855f7', font: { size: 11 } },
+          grid: { drawOnChartArea: false }
+        }
+      }
+    }
+  });
+
+  // 渲染自定义图例
+  var legendHtml = series.map(function(s) {
+    return '<div class="growth-legend-item">'
+      + '<div class="growth-legend-dot" style="background:' + s.color + '"></div>'
+      + s.label + '</div>';
+  }).join('');
+  document.getElementById('growth-legend').innerHTML = legendHtml;
 }

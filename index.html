@@ -71,6 +71,21 @@ tr:hover td{background:#222}
 .score-high{color:#4ade80}
 .score-mid{color:#facc15}
 .score-low{color:#f87171}
+/* 图表 Tab */
+.chart-tabs-card{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:10px;padding:20px;margin-bottom:24px}
+.chart-tabs{display:flex;gap:8px;margin-bottom:16px;border-bottom:1px solid #2a2a2a;padding-bottom:12px}
+.chart-tab{background:none;border:none;color:#666;font-size:12px;padding:6px 14px;border-radius:6px;cursor:pointer;transition:all .2s}
+.chart-tab:hover{color:#ccc;background:#222}
+.chart-tab.active{background:#ff2442;color:#fff}
+.chart-wrap-tall{position:relative;height:260px}
+.growth-legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px;justify-content:center}
+.growth-legend-item{display:flex;align-items:center;gap:6px;font-size:11px;color:#888}
+.growth-legend-dot{width:10px;height:10px;border-radius:50%}
+@media(max-width:640px){
+  .chart-tabs{gap:4px}
+  .chart-tab{font-size:11px;padding:5px 10px}
+  .chart-wrap-tall{height:220px}
+}
 
 /* ── 移动端适配 ────────────────────────────────── */
 @media (max-width: 640px) {
@@ -143,9 +158,24 @@ tr:hover td{background:#222}
   <div class="kpi-card"><div class="kpi-label">平均评论/互动比</div><div class="kpi-value" id="kpi-comment-ratio">-</div><div class="kpi-sub">讨论深度</div></div>
   <div class="kpi-card"><div class="kpi-label">综合评分</div><div class="kpi-value" id="kpi-score">-</div><div class="kpi-sub">满分100</div></div>
 </div>
-<div class="charts-grid">
-  <div class="chart-card"><div class="chart-title">互动量趋势（按发布时间）</div><div class="chart-wrap"><canvas id="chart-trend"></canvas></div></div>
-  <div class="chart-card"><div class="chart-title">互动结构分布</div><div class="chart-wrap"><canvas id="chart-structure"></canvas></div></div>
+<div class="chart-tabs-card">
+  <div class="chart-tabs">
+    <button class="chart-tab active" onclick="switchChartTab('growth',this)">📈 成长趋势</button>
+    <button class="chart-tab" onclick="switchChartTab('trend',this)">📊 互动趋势</button>
+    <button class="chart-tab" onclick="switchChartTab('structure',this)">🍩 互动结构</button>
+  </div>
+  <div class="chart-tab-content" id="tab-growth">
+    <div class="chart-wrap-tall"><canvas id="chart-growth"></canvas></div>
+    <div class="growth-legend" id="growth-legend"></div>
+  </div>
+  <div class="chart-tab-content" id="tab-trend" style="display:none">
+    <div class="chart-title" style="margin-bottom:12px">互动量趋势（按发布时间）</div>
+    <div class="chart-wrap"><canvas id="chart-trend"></canvas></div>
+  </div>
+  <div class="chart-tab-content" id="tab-structure" style="display:none">
+    <div class="chart-title" style="margin-bottom:12px">互动结构分布</div>
+    <div class="chart-wrap"><canvas id="chart-structure"></canvas></div>
+  </div>
 </div>
 <div class="analysis-card" id="analysis-card">
   <div class="analysis-title">🤖 智能分析</div>
@@ -184,6 +214,11 @@ tr:hover td{background:#222}
 <script src="sources/chenzihaha_data.js"></script>
 <script src="sources/zhangzhala_data.js"></script>
 <script src="sources/lumoseducation_data.js"></script>
+<script src="sources/liangkeban_history.js"></script>
+<script src="sources/caiwenjing_history.js"></script>
+<script src="sources/chenzihaha_history.js"></script>
+<script src="sources/zhangzhala_history.js"></script>
+<script src="sources/lumoseducation_history.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
