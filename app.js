@@ -39,8 +39,30 @@ function loadSource(sourceId) {
   // 销毁现有图表
   if (chartTrend) { chartTrend.destroy(); chartTrend = null; }
   if (chartStructure) { chartStructure.destroy(); chartStructure = null; }
+  if (growthChart) { growthChart.destroy(); growthChart = null; }
+
+  // 渲染前临时显示所有 tab 内容，确保 canvas 有尺寸（Chart.js 在 display:none 时无法获取尺寸）
+  var tabIds = ['tab-trend', 'tab-structure', 'tab-growth'];
+  var prevDisplay = {};
+  tabIds.forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) { prevDisplay[id] = el.style.display; el.style.display = ''; }
+  });
 
   render();
+
+  // 渲染完后恢复各 tab 的显示状态
+  tabIds.forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el && prevDisplay[id] !== undefined) el.style.display = prevDisplay[id];
+  });
+  // 当前激活的 tab 始终显示
+  var activeTab = document.querySelector('.chart-tab.active');
+  if (activeTab) {
+    var tabName = activeTab.getAttribute('onclick').match(/'(\w+)'/)[1];
+    var activeEl = document.getElementById('tab-' + tabName);
+    if (activeEl) activeEl.style.display = '';
+  }
 }
 
 function rebuildWeekButtons() {
