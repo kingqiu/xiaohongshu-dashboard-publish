@@ -5,6 +5,22 @@ var currentSourceId = null;
 var chartTrend = null, chartStructure = null;
 var currentSortKey = 'engage', currentSortBtn = null;
 
+// 安全销毁 Chart.js 图表：同时清理变量引用和 canvas 内部残留引用
+function safeDestroyChart(chartRef, canvasId) {
+  try {
+    if (chartRef) { chartRef.destroy(); }
+  } catch(e) { /* destroy 失败时静默处理 */ }
+  // 双保险：用 Chart.getChart 清理 canvas 上残留的图表引用
+  try {
+    var canvas = document.getElementById(canvasId);
+    if (canvas) {
+      var existing = Chart.getChart(canvas);
+      if (existing) { existing.destroy(); }
+    }
+  } catch(e) { /* 静默处理 */ }
+  return null;
+}
+
 // 初始化数据源下拉框
 (function initSources() {
   var select = document.getElementById('source-select');
@@ -36,10 +52,10 @@ function loadSource(sourceId) {
   currentSortKey = 'engage';
   currentSortBtn = null;
 
-  // 销毁现有图表
-  if (chartTrend) { chartTrend.destroy(); chartTrend = null; }
-  if (chartStructure) { chartStructure.destroy(); chartStructure = null; }
-  if (growthChart) { growthChart.destroy(); growthChart = null; }
+  // 销毁现有图表（使用安全销毁，防止 Chart.js canvas 残留引用）
+  chartTrend = safeDestroyChart(chartTrend, 'chart-trend');
+  chartStructure = safeDestroyChart(chartStructure, 'chart-structure');
+  growthChart = safeDestroyChart(growthChart, 'chart-growth');
 
   // 渲染前临时显示所有 tab 内容，确保 canvas 有尺寸（Chart.js 在 display:none 时无法获取尺寸）
   var tabIds = ['tab-trend', 'tab-structure', 'tab-growth'];
@@ -49,19 +65,21 @@ function loadSource(sourceId) {
     if (el) { prevDisplay[id] = el.style.display; el.style.display = ''; }
   });
 
-  render();
-
-  // 渲染完后恢复各 tab 的显示状态
-  tabIds.forEach(function(id) {
-    var el = document.getElementById(id);
-    if (el && prevDisplay[id] !== undefined) el.style.display = prevDisplay[id];
-  });
-  // 当前激活的 tab 始终显示
-  var activeTab = document.querySelector('.chart-tab.active');
-  if (activeTab) {
-    var tabName = activeTab.getAttribute('onclick').match(/'(\w+)'/)[1];
-    var activeEl = document.getElementById('tab-' + tabName);
-    if (activeEl) activeEl.style.display = '';
+  try {
+    render();
+  } finally {
+    // 无论 render 是否出错，都要恢复 tab 显示状态（防止布局错乱）
+    tabIds.forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el && prevDisplay[id] !== undefined) el.style.display = prevDisplay[id];
+    });
+    // 当前激活的 tab 始终显示
+    var activeTab = document.querySelector('.chart-tab.active');
+    if (activeTab) {
+      var tabName = activeTab.getAttribute('onclick').match(/'(\w+)'/)[1];
+      var activeEl = document.getElementById('tab-' + tabName);
+      if (activeEl) activeEl.style.display = '';
+    }
   }
 }
 
@@ -199,47 +217,52 @@ function render() {
   // 账号画像标签
   renderProfileTags(currentMeta);
 
+  // ─── 图表渲染（每个图表独立 try-catch，防止一个失败影响其他） ───
+
   // 成长趋势折线图
-  renderGrowthChart(currentSourceId);
+  try {
+    renderGrowthChart(currentSourceId);
+  } catch(e) {
+    console.error('[看板] 成长趋势图渲染失败:', e);
+  }
 
   // 图表1: 互动量趋势（堆叠柱状图）
-  var sorted = data.slice().sort(function(a,b){ return a.date.localeCompare(b.date); });
-  var labels = sorted.map(function(d){ return d.date.slice(5); });
+  try {
+    var sorted = data.slice().sort(function(a,b){ return a.date.localeCompare(b.date); });
+    var labels = sorted.map(function(d){ return d.date.slice(5); });
 
-  var trendData = {
-    labels: labels,
-    datasets: [
-      {
-        label: '点赞',
-        data: sorted.map(function(d){ return safeNum(d.likes); }),
-        backgroundColor: '#3b82f6',
-        borderRadius: 2
-      },
-      {
-        label: '收藏',
-        data: sorted.map(function(d){ return safeNum(d.saves); }),
-        backgroundColor: '#22c55e',
-        borderRadius: 2
-      },
-      {
-        label: '评论',
-        data: sorted.map(function(d){ return safeNum(d.comments); }),
-        backgroundColor: '#f97316',
-        borderRadius: 2
-      },
-      {
-        label: '分享',
-        data: sorted.map(function(d){ return safeNum(d.shares); }),
-        backgroundColor: '#a855f7',
-        borderRadius: 2
-      }
-    ]
-  };
+    var trendData = {
+      labels: labels,
+      datasets: [
+        {
+          label: '点赞',
+          data: sorted.map(function(d){ return safeNum(d.likes); }),
+          backgroundColor: '#3b82f6',
+          borderRadius: 2
+        },
+        {
+          label: '收藏',
+          data: sorted.map(function(d){ return safeNum(d.saves); }),
+          backgroundColor: '#22c55e',
+          borderRadius: 2
+        },
+        {
+          label: '评论',
+          data: sorted.map(function(d){ return safeNum(d.comments); }),
+          backgroundColor: '#f97316',
+          borderRadius: 2
+        },
+        {
+          label: '分享',
+          data: sorted.map(function(d){ return safeNum(d.shares); }),
+          backgroundColor: '#a855f7',
+          borderRadius: 2
+        }
+      ]
+    };
 
-  if (chartTrend) {
-    chartTrend.data = trendData;
-    chartTrend.update();
-  } else {
+    // 安全清理 canvas 残留引用后再创建
+    chartTrend = safeDestroyChart(chartTrend, 'chart-trend');
     chartTrend = new Chart(document.getElementById('chart-trend'), {
       type: 'bar',
       data: trendData,
@@ -255,28 +278,29 @@ function render() {
         }
       }
     });
+  } catch(e) {
+    console.error('[看板] 互动趋势图渲染失败:', e);
   }
 
   // 图表2: 互动结构分布（饼图）
-  var totalLikes = data.reduce(function(s,d){ return s + safeNum(d.likes); }, 0);
-  var totalSaves = data.reduce(function(s,d){ return s + safeNum(d.saves); }, 0);
-  var totalComments = data.reduce(function(s,d){ return s + safeNum(d.comments); }, 0);
-  var totalShares = data.reduce(function(s,d){ return s + safeNum(d.shares); }, 0);
+  try {
+    var totalLikes = data.reduce(function(s,d){ return s + safeNum(d.likes); }, 0);
+    var totalSaves = data.reduce(function(s,d){ return s + safeNum(d.saves); }, 0);
+    var totalComments = data.reduce(function(s,d){ return s + safeNum(d.comments); }, 0);
+    var totalShares = data.reduce(function(s,d){ return s + safeNum(d.shares); }, 0);
 
-  var structureData = {
-    labels: ['点赞', '收藏', '评论', '分享'],
-    datasets: [{
-      data: [totalLikes, totalSaves, totalComments, totalShares],
-      backgroundColor: ['#3b82f6', '#22c55e', '#f97316', '#a855f7'],
-      borderColor: '#0f0f0f',
-      borderWidth: 2
-    }]
-  };
+    var structureData = {
+      labels: ['点赞', '收藏', '评论', '分享'],
+      datasets: [{
+        data: [totalLikes, totalSaves, totalComments, totalShares],
+        backgroundColor: ['#3b82f6', '#22c55e', '#f97316', '#a855f7'],
+        borderColor: '#0f0f0f',
+        borderWidth: 2
+      }]
+    };
 
-  if (chartStructure) {
-    chartStructure.data = structureData;
-    chartStructure.update();
-  } else {
+    // 安全清理 canvas 残留引用后再创建
+    chartStructure = safeDestroyChart(chartStructure, 'chart-structure');
     chartStructure = new Chart(document.getElementById('chart-structure'), {
       type: 'doughnut',
       data: structureData,
@@ -288,9 +312,11 @@ function render() {
         }
       }
     });
+  } catch(e) {
+    console.error('[看板] 互动结构图渲染失败:', e);
   }
 
-  // 表格排序
+  // 表格排序（放在最后，确保一定执行）
   sortTable(currentSortKey, currentSortBtn);
 }
 
@@ -406,7 +432,7 @@ function renderGrowthChart(sourceId) {
   var ctx = document.getElementById('chart-growth');
   if (!ctx) return;
 
-  if (growthChart) { growthChart.destroy(); growthChart = null; }
+  growthChart = safeDestroyChart(growthChart, 'chart-growth');
 
   if (!history || history.length === 0) {
     ctx.parentNode.innerHTML = '<div style="color:#555;font-size:13px;text-align:center;padding:60px 0">暂无历史数据，下次刷新后开始记录</div>';
