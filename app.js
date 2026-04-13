@@ -355,13 +355,17 @@ function renderProfileTags(meta) {
 
 // ─── Tab 切换 ────────────────────────────────────────────────
 function switchChartTab(tab, btn) {
-  // 切换按钮状态
   document.querySelectorAll('.chart-tab').forEach(function(b) { b.classList.remove('active'); });
   btn.classList.add('active');
-  // 切换内容
   ['growth','trend','structure'].forEach(function(t) {
     document.getElementById('tab-' + t).style.display = (t === tab) ? '' : 'none';
   });
+  // 切换到该 Tab 后强制触发图表 resize，解决 display:none 时尺寸为0导致渲染空白的问题
+  setTimeout(function() {
+    if (tab === 'trend' && chartTrend) chartTrend.resize();
+    if (tab === 'structure' && chartStructure) chartStructure.resize();
+    if (tab === 'growth' && growthChart) growthChart.resize();
+  }, 50);
 }
 
 // ─── 成长趋势折线图 ──────────────────────────────────────────

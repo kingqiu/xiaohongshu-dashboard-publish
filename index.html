@@ -160,21 +160,22 @@ tr:hover td{background:#222}
 </div>
 <div class="chart-tabs-card">
   <div class="chart-tabs">
-    <button class="chart-tab active" onclick="switchChartTab('growth',this)">📈 成长趋势</button>
-    <button class="chart-tab" onclick="switchChartTab('trend',this)">📊 互动趋势</button>
+    <button class="chart-tab active" onclick="switchChartTab('trend',this)">📊 互动趋势</button>
     <button class="chart-tab" onclick="switchChartTab('structure',this)">🍩 互动结构</button>
+    <button class="chart-tab" onclick="switchChartTab('growth',this)">📈 成长趋势</button>
   </div>
-  <div class="chart-tab-content" id="tab-growth">
-    <div class="chart-wrap-tall"><canvas id="chart-growth"></canvas></div>
-    <div class="growth-legend" id="growth-legend"></div>
-  </div>
-  <div class="chart-tab-content" id="tab-trend" style="display:none">
+  <!-- 所有 Tab 内容始终渲染在 DOM 中，用 visibility+height 控制显示，避免 Chart.js 尺寸为0的问题 -->
+  <div class="chart-tab-content" id="tab-trend">
     <div class="chart-title" style="margin-bottom:12px">互动量趋势（按发布时间）</div>
     <div class="chart-wrap"><canvas id="chart-trend"></canvas></div>
   </div>
   <div class="chart-tab-content" id="tab-structure" style="display:none">
     <div class="chart-title" style="margin-bottom:12px">互动结构分布</div>
     <div class="chart-wrap"><canvas id="chart-structure"></canvas></div>
+  </div>
+  <div class="chart-tab-content" id="tab-growth" style="display:none">
+    <div class="chart-wrap-tall"><canvas id="chart-growth"></canvas></div>
+    <div class="growth-legend" id="growth-legend"></div>
   </div>
 </div>
 <div class="analysis-card" id="analysis-card">
