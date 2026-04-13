@@ -71,6 +71,61 @@ tr:hover td{background:#222}
 .score-high{color:#4ade80}
 .score-mid{color:#facc15}
 .score-low{color:#f87171}
+
+/* ── 移动端适配 ────────────────────────────────── */
+@media (max-width: 640px) {
+  body { padding: 14px 12px; overflow-x: hidden; }
+
+  /* KPI：5张卡排成 3+2（前3张一行，后2张各占50%） */
+  .kpi-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  .kpi-card:nth-child(4),
+  .kpi-card:nth-child(5) {
+    grid-column: span 1;
+  }
+  /* 后两张卡整体居中：用子网格让第4、5张占满后两格 */
+  .kpi-grid::after {
+    content: '';
+    display: none;
+  }
+  /* 实际让4、5两张卡占 1.5列宽：改为2列+各自50% */
+  /* 简洁实现：后两张单独一行，各占1/2 */
+  .kpi-card:nth-child(4) { grid-column: 1 / span 1; grid-row: 2; }
+  .kpi-card:nth-child(5) { grid-column: 2 / span 1; grid-row: 2; }
+
+  .kpi-value { font-size: 20px; }
+  .kpi-label { font-size: 10px; }
+  .kpi-sub   { font-size: 11px; }
+
+  /* 图表：两列变一列 */
+  .charts-grid { grid-template-columns: 1fr; gap: 12px; }
+
+  /* 表格横向滚动（表格本身允许超出容器，容器截断） */
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: 100%; }
+  table { min-width: 460px; width: max-content; }
+  .note-title { max-width: 90px; }
+
+  /* header：账号选择器换行 */
+  .header-row { flex-wrap: wrap; gap: 8px; }
+
+  /* 周筛选按钮更小 */
+  .week-btn { font-size: 10px; padding: 3px 7px; }
+
+  /* 分析卡片字号 */
+  .analysis-body { font-size: 12px; line-height: 1.7; }
+
+  /* 画像标签 */
+  .tag-badge { font-size: 11px; padding: 3px 8px; }
+}
+
+/* 平板端（641px ~ 900px）：KPI 改为 3 列，图表保持两列 */
+@media (min-width: 641px) and (max-width: 900px) {
+  .kpi-grid { grid-template-columns: repeat(3, 1fr); }
+  .kpi-card:nth-child(4) { grid-column: 1 / span 1; }
+  .kpi-card:nth-child(5) { grid-column: 2 / span 1; }
+}
 </style>
 </head>
 <body>
@@ -84,7 +139,7 @@ tr:hover td{background:#222}
 <div class="kpi-grid">
   <div class="kpi-card"><div class="kpi-label">总互动量</div><div class="kpi-value" id="kpi-engagement">-</div><div class="kpi-sub">所有笔记合计</div></div>
   <div class="kpi-card"><div class="kpi-label">平均收藏率</div><div class="kpi-value" id="kpi-save-rate">-</div><div class="kpi-sub">内容干货指数</div></div>
-  <div class="kpi-card"><div class="kpi-label">平均互动质量指数</div><div class="kpi-value" id="kpi-quality">-</div><div class="kpi-sub">&gt;1.5为优质</div></div>
+  <div class="kpi-card"><div class="kpi-label">平均互动指数</div><div class="kpi-value" id="kpi-quality">-</div><div class="kpi-sub">&gt;1.5为优质</div></div>
   <div class="kpi-card"><div class="kpi-label">平均评论/互动比</div><div class="kpi-value" id="kpi-comment-ratio">-</div><div class="kpi-sub">讨论深度</div></div>
   <div class="kpi-card"><div class="kpi-label">综合评分</div><div class="kpi-value" id="kpi-score">-</div><div class="kpi-sub">满分100</div></div>
 </div>
@@ -112,7 +167,7 @@ tr:hover td{background:#222}
       <button class="sort-btn" onclick="sortTable('score',this)">综合评分</button>
     </div>
   </div>
-  <table>
+  <div class="table-wrap"><table>
     <thead><tr>
       <th>#</th><th>笔记标题</th><th class="num">点赞</th>
       <th class="num">收藏</th><th class="num">评论</th><th class="num">分享</th>
@@ -120,7 +175,7 @@ tr:hover td{background:#222}
       <th>日期</th>
     </tr></thead>
     <tbody id="table-body"></tbody>
-  </table>
+  </table></div>
 </div>
 <script src="chart.min.js"></script>
 <script src="sources/registry.js"></script>
