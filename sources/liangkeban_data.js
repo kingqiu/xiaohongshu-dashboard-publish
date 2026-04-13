@@ -24,12 +24,12 @@ var LIANGKEBAN_DATA = [
     "ctr": null,
     "likes": 5,
     "comments": 0,
-    "saves": 13,
+    "saves": 14,
     "fans": null,
     "shares": 2,
-    "save_rate": 0.65,
-    "quality_index": 1.3,
-    "score": 56
+    "save_rate": 0.667,
+    "quality_index": 1.29,
+    "score": 55
   },
   {
     "title": "💰这家神仙公司如何做到99.5%员工都用AI？",
@@ -56,10 +56,10 @@ var LIANGKEBAN_DATA = [
     "ctr": null,
     "likes": 63,
     "comments": 6,
-    "saves": 165,
+    "saves": 166,
     "fans": null,
     "shares": 33,
-    "save_rate": 0.618,
+    "save_rate": 0.619,
     "quality_index": 1.44,
     "score": 63
   },
@@ -330,12 +330,23 @@ var LIANGKEBAN_META = {
   "following": 61,
   "notes_count": 81,
   "total_likes": 1310,
-  "total_saves": 1988,
-  "total_likes_and_saves": 3298,
-  "total_engagement": 1595,
-  "avg_save_rate": 0.21899999999999997,
+  "total_saves": 1990,
+  "total_likes_and_saves": 3300,
+  "total_engagement": 1597,
+  "avg_save_rate": 0.22,
   "avg_quality_index": 1.46,
   "avg_comment_ratio": 0.027000000000000003,
   "avg_score": 38,
-  "analysis": "「两克伴」账号以深度技术教程类内容表现突出，TOP5笔记均围绕AI工具、方法或产品选型，收藏率高达50%-67%，印证了专业、实用干货是核心爆款特征。互动结构以收藏主导（平均21.9%），辅以少量高质量评论（平均2.7%），分享转化较弱。建议：1. 强化实操演示类内容，结合「 nano banana pro」的爆款模式，增加教程步骤图/视频提升收藏率；2. 挖掘粉丝痛点设计互动问答环节，如「OpenClaw和Hermes怎么选」的评论区互动，引导深度评论，提升互动质量指数。"
+  "analysis": "「两克伴」账号的爆款内容集中在AI工具、技巧教程类，如「nano banana pro」收藏率高达51.7%，互动质量指数达1.50，显示深度实用内容易引发用户收藏行为。互动结构以收藏型为主（平均收藏率22.0%），辅以少量评论互动（平均2.7%），分享转化率较低（平均综合评分38），内容价值感强但社交传播力不足。建议：1. 强化教程类内容深度，提升图文与视频结合的实操演示，增加步骤分解与效果对比，以提升收藏转化；2. 在教程后设置互动钩子，如提问或投票，引导评论互动，平衡内容价值与社交传播。",
+  "profile_tags": {
+    "follower_tier": "素人",
+    "primary_vertical": "AI工具",
+    "secondary_vertical": null,
+    "content_style": "干货教程",
+    "content_consistency": "低",
+    "engagement_quality": "中",
+    "content_format": "图文为主",
+    "commercial_stage": "起步期",
+    "tagged_at": "2026-04-13"
+  }
 };
