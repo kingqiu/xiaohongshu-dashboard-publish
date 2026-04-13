@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>小红书数据看板</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0f0f0f;color:#e0e0e0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;padding:24px}
+h1{font-size:20px;font-weight:600;color:#fff;margin-bottom:4px}
+.header-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.source-select{background:#1a1a1a;border:1px solid #2a2a2a;color:#e0e0e0;font-size:13px;padding:6px 12px;border-radius:6px;cursor:pointer;outline:none}
+.source-select:hover{border-color:#555}
+.source-select:focus{border-color:#ff2442}
+.subtitle{font-size:13px;color:#666;margin-bottom:16px}
+.week-bar{display:flex;align-items:center;gap:10px;margin-bottom:20px;flex-wrap:wrap}
+.week-bar label{font-size:12px;color:#888}
+.week-btn{background:#1a1a1a;border:1px solid #2a2a2a;color:#888;font-size:11px;padding:4px 10px;border-radius:4px;cursor:pointer}
+.week-btn.active{background:#ff2442;border-color:#ff2442;color:#fff}
+.week-btn:hover{border-color:#555}
+.kpi-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:24px}
+.kpi-card{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:10px;padding:16px}
+.kpi-label{font-size:11px;color:#666;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px}
+.kpi-value{font-size:26px;font-weight:700;color:#fff}
+.kpi-sub{font-size:12px;color:#888;margin-top:4px}
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+.chart-card{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:10px;padding:20px}
+.chart-title{font-size:13px;font-weight:600;color:#ccc;margin-bottom:16px}
+.chart-wrap{position:relative;height:220px}
+.analysis-card{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:10px;padding:20px;margin-bottom:24px;position:relative;overflow:hidden}
+.analysis-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,#ff2442,#ff6b81,#a855f7)}
+.analysis-title{font-size:14px;font-weight:600;color:#ccc;margin-bottom:12px;padding-left:12px}
+.analysis-body{font-size:13px;color:#bbb;line-height:1.8;padding-left:12px}
+.analysis-footer{font-size:11px;color:#555;margin-top:12px;padding-left:12px}
+.profile-card{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:10px;padding:20px;margin-bottom:24px}
+.profile-title{font-size:14px;font-weight:600;color:#ccc;margin-bottom:14px}
+.profile-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.tag-group{display:flex;align-items:center;gap:6px}
+.tag-group-label{font-size:11px;color:#555;white-space:nowrap}
+.tag-badge{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:500;white-space:nowrap}
+.tag-badge.tier-素人{background:rgba(100,100,100,0.2);color:#888;border:1px solid #444}
+.tag-badge.tier-KOC{background:rgba(59,130,246,0.15);color:#60a5fa;border:1px solid rgba(59,130,246,0.3)}
+.tag-badge.tier-尾部达人{background:rgba(16,185,129,0.15);color:#34d399;border:1px solid rgba(16,185,129,0.3)}
+.tag-badge.tier-腰部达人{background:rgba(245,158,11,0.15);color:#fbbf24;border:1px solid rgba(245,158,11,0.3)}
+.tag-badge.tier-头部达人{background:rgba(239,68,68,0.15);color:#f87171;border:1px solid rgba(239,68,68,0.3)}
+.tag-badge.vertical{background:rgba(168,85,247,0.15);color:#c084fc;border:1px solid rgba(168,85,247,0.3)}
+.tag-badge.style{background:rgba(20,184,166,0.15);color:#2dd4bf;border:1px solid rgba(20,184,166,0.3)}
+.tag-badge.quality-高{background:rgba(16,185,129,0.15);color:#34d399;border:1px solid rgba(16,185,129,0.3)}
+.tag-badge.quality-中{background:rgba(245,158,11,0.15);color:#fbbf24;border:1px solid rgba(245,158,11,0.3)}
+.tag-badge.quality-低{background:rgba(239,68,68,0.15);color:#f87171;border:1px solid rgba(239,68,68,0.3)}
+.tag-badge.consistency-高{background:rgba(16,185,129,0.15);color:#34d399;border:1px solid rgba(16,185,129,0.3)}
+.tag-badge.consistency-中{background:rgba(245,158,11,0.15);color:#fbbf24;border:1px solid rgba(245,158,11,0.3)}
+.tag-badge.consistency-低{background:rgba(239,68,68,0.15);color:#f87171;border:1px solid rgba(239,68,68,0.3)}
+.tag-badge.stage{background:rgba(99,102,241,0.15);color:#a5b4fc;border:1px solid rgba(99,102,241,0.3)}
+.tag-badge.format{background:rgba(100,100,100,0.15);color:#9ca3af;border:1px solid #444}
+.profile-footer{font-size:11px;color:#555;margin-top:4px}
+.table-card{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:10px;padding:20px}
+.table-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.table-title{font-size:13px;font-weight:600;color:#ccc}
+.sort-btns{display:flex;gap:6px}
+.sort-btn{background:#2a2a2a;border:none;color:#888;font-size:11px;padding:4px 10px;border-radius:4px;cursor:pointer}
+.sort-btn.active{background:#ff2442;color:#fff}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{text-align:left;color:#555;font-weight:500;padding:6px 8px;border-bottom:1px solid #2a2a2a}
+td{padding:8px;border-bottom:1px solid #1e1e1e;color:#ccc}
+tr:hover td{background:#222}
+.note-title{max-width:220px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#e0e0e0}
+.num{text-align:right;font-variant-numeric:tabular-nums}
+.top-row td{color:#fff}
+.top-row td:first-child{border-left:2px solid #ff2442}
+.score-high{color:#4ade80}
+.score-mid{color:#facc15}
+.score-low{color:#f87171}
+</style>
+</head>
+<body>
+<div class="header-row"><h1>小红书数据看板</h1><select id="source-select" class="source-select"></select></div>
+<p class="subtitle" id="subtitle">加载中...</p>
+<div class="week-bar">
+  <label>按周筛选：</label>
+  <button class="week-btn active" onclick="filterWeek(null,this)">全部</button>
+  <span id="week-btns"></span>
+</div>
+<div class="kpi-grid">
+  <div class="kpi-card"><div class="kpi-label">总互动量</div><div class="kpi-value" id="kpi-engagement">-</div><div class="kpi-sub">所有笔记合计</div></div>
+  <div class="kpi-card"><div class="kpi-label">平均收藏率</div><div class="kpi-value" id="kpi-save-rate">-</div><div class="kpi-sub">内容干货指数</div></div>
+  <div class="kpi-card"><div class="kpi-label">平均互动质量指数</div><div class="kpi-value" id="kpi-quality">-</div><div class="kpi-sub">&gt;1.5为优质</div></div>
+  <div class="kpi-card"><div class="kpi-label">平均评论/互动比</div><div class="kpi-value" id="kpi-comment-ratio">-</div><div class="kpi-sub">讨论深度</div></div>
+  <div class="kpi-card"><div class="kpi-label">综合评分</div><div class="kpi-value" id="kpi-score">-</div><div class="kpi-sub">满分100</div></div>
+</div>
+<div class="charts-grid">
+  <div class="chart-card"><div class="chart-title">互动量趋势（按发布时间）</div><div class="chart-wrap"><canvas id="chart-trend"></canvas></div></div>
+  <div class="chart-card"><div class="chart-title">互动结构分布</div><div class="chart-wrap"><canvas id="chart-structure"></canvas></div></div>
+</div>
+<div class="analysis-card" id="analysis-card">
+  <div class="analysis-title">🤖 智能分析</div>
+  <div class="analysis-body" id="analysis-body">暂无分析数据</div>
+  <div class="analysis-footer">由 AI 基于公开数据生成</div>
+</div>
+<div class="profile-card" id="profile-card" style="display:none">
+  <div class="profile-title">🏷️ 账号画像</div>
+  <div class="profile-tags" id="profile-tags"></div>
+  <div class="profile-footer" id="profile-footer"></div>
+</div>
+<div class="table-card">
+  <div class="table-header">
+    <div class="table-title">笔记表现排行</div>
+    <div class="sort-btns">
+      <button class="sort-btn active" onclick="sortTable('engage',this)">互动量</button>
+      <button class="sort-btn" onclick="sortTable('save_rate',this)">收藏率</button>
+      <button class="sort-btn" onclick="sortTable('quality_index',this)">互动质量</button>
+      <button class="sort-btn" onclick="sortTable('score',this)">综合评分</button>
+    </div>
+  </div>
+  <table>
+    <thead><tr>
+      <th>#</th><th>笔记标题</th><th class="num">点赞</th>
+      <th class="num">收藏</th><th class="num">评论</th><th class="num">分享</th>
+      <th class="num">收藏率</th><th class="num">互动质量</th><th class="num">综合评分</th>
+      <th>日期</th>
+    </tr></thead>
+    <tbody id="table-body"></tbody>
+  </table>
+</div>
+<script src="chart.min.js"></script>
+<script src="sources/registry.js"></script>
+<script src="sources/liangkeban_data.js"></script>
+<script src="sources/caiwenjing_data.js"></script>
+<script src="sources/chenzihaha_data.js"></script>
+<script src="sources/zhangzhala_data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
