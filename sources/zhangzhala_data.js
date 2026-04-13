@@ -302,22 +302,6 @@ var ZHANGZHALA_DATA = [
     "save_rate": 0.28600000000000003,
     "quality_index": 1.34,
     "score": 56
-  },
-  {
-    "title": "把我推荐的AI高质量信息源做成了skill！",
-    "date": "2026-03-19",
-    "type": null,
-    "impressions": null,
-    "views": null,
-    "ctr": null,
-    "likes": 7076,
-    "comments": 213,
-    "saves": 8969,
-    "fans": null,
-    "shares": 2194,
-    "save_rate": 0.486,
-    "quality_index": 1.39,
-    "score": 61
   }
 ];
 

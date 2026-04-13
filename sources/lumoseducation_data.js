@@ -302,22 +302,6 @@ var LUMOSEDUCATION_DATA = [
     "save_rate": 0.188,
     "quality_index": 1.56,
     "score": 54
-  },
-  {
-    "title": "🇦🇺 澳大利亚悉尼｜顶级师资团队",
-    "date": "2024-07-24",
-    "type": null,
-    "impressions": null,
-    "views": null,
-    "ctr": null,
-    "likes": 19,
-    "comments": 31,
-    "saves": 11,
-    "fans": null,
-    "shares": 7,
-    "save_rate": 0.162,
-    "quality_index": 2.68,
-    "score": 76
   }
 ];
 
