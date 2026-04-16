@@ -339,14 +339,35 @@ var CHENZIHAHA_META = {
   "avg_score": 36,
   "analysis": "「陈紫haha」账号内容呈现明显爆款特征：以「Golden Glow」「Curated Looks」为代表的穿搭类笔记收藏率高达16%-25%，互动质量指数稳定，印证视觉吸睛内容易获高收藏；评论型互动占比相对较低（6.7%），但「Black Wardrobe Diaries」等深度穿搭笔记（评论占比10.3%）证明专业内容能提升互动深度。策略建议：1.强化\"视觉冲击+实用指南\"组合，参考TOP5笔记中收藏率超15%的\"Golden Glow\"模式；2.增加互动引导，可在穿搭笔记结尾设置\"衣橱搭配问题征集\"，通过评论型互动提升粉丝粘性。",
   "profile_tags": {
+    "content_theme": {
+      "primary_vertical": "时尚穿搭",
+      "sub_direction": "穿搭分享"
+    },
+    "content_style": {
+      "audience_level": "小白向",
+      "sentence_pattern": "清单型",
+      "tone": "轻松分享"
+    },
+    "seeding_traits": {
+      "seeding_tendency": "强种草",
+      "suitable_ad_type": "消费品"
+    },
+    "engagement_traits": {
+      "fan_activity": "中活跃",
+      "content_burst": "稳定型",
+      "seeding_efficiency": "均衡型"
+    },
+    "account_health": {
+      "update_freq": "高频",
+      "content_verticality": "高垂直",
+      "engagement_authenticity": "正常"
+    },
+    "collab_fit": {
+      "recommended_scenario": "生活植入",
+      "brand_tone_match": "生活方式品牌"
+    },
     "follower_tier": "腰部达人",
-    "primary_vertical": "时尚穿搭",
-    "secondary_vertical": null,
-    "content_style": "生活分享",
-    "content_consistency": "低",
-    "engagement_quality": "中",
     "content_format": "图文为主",
-    "commercial_stage": "发展期",
-    "tagged_at": "2026-04-13"
+    "tagged_at": "2026-04-16"
   }
 };

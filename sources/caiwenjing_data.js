@@ -339,14 +339,35 @@ var CAIWENJING_META = {
   "avg_score": 29,
   "analysis": "蔡文静账号的爆款内容集中于美食（「炫一支可以当猪蹄啃的鸡腿」）和情绪共鸣类（「当我无端失眠时精神状态belike…」），收藏率与互动质量指数均表现突出，显示强视觉冲击力与情感连接是关键。互动结构以收藏型为主（TOP5笔记收藏率均高于5%），辅以评论型互动（平均评论/互动比4.8%），分享型互动表现相对较弱。建议：1. 持续深化美食类内容，强化高颜值呈现与场景化叙事；2. 结合热点情绪话题创作，如生活痛点、趣味互动挑战，提升评论与分享转化。",
   "profile_tags": {
+    "content_theme": {
+      "primary_vertical": "时尚穿搭",
+      "sub_direction": "穿搭分享"
+    },
+    "content_style": {
+      "audience_level": "小白向",
+      "sentence_pattern": "清单型",
+      "tone": "轻松分享"
+    },
+    "seeding_traits": {
+      "seeding_tendency": "强种草",
+      "suitable_ad_type": "消费品"
+    },
+    "engagement_traits": {
+      "fan_activity": "高活跃",
+      "content_burst": "波动型",
+      "seeding_efficiency": "均衡型"
+    },
+    "account_health": {
+      "update_freq": "高频",
+      "content_verticality": "高垂直",
+      "engagement_authenticity": "正常"
+    },
+    "collab_fit": {
+      "recommended_scenario": "生活植入",
+      "brand_tone_match": "年轻潮流品牌"
+    },
     "follower_tier": "头部达人",
-    "primary_vertical": "时尚穿搭",
-    "secondary_vertical": "美妆护肤",
-    "content_style": "生活分享",
-    "content_consistency": "低",
-    "engagement_quality": "中",
     "content_format": "图文为主",
-    "commercial_stage": "成熟期",
-    "tagged_at": "2026-04-13"
+    "tagged_at": "2026-04-16"
   }
 };

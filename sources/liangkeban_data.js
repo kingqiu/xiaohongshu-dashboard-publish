@@ -339,14 +339,35 @@ var LIANGKEBAN_META = {
   "avg_score": 38,
   "analysis": "「两克伴」账号的爆款内容集中在AI工具、技巧教程类，如「nano banana pro」收藏率高达51.7%，互动质量指数达1.50，显示深度实用内容易引发用户收藏行为。互动结构以收藏型为主（平均收藏率22.0%），辅以少量评论互动（平均2.7%），分享转化率较低（平均综合评分38），内容价值感强但社交传播力不足。建议：1. 强化教程类内容深度，提升图文与视频结合的实操演示，增加步骤分解与效果对比，以提升收藏转化；2. 在教程后设置互动钩子，如提问或投票，引导评论互动，平衡内容价值与社交传播。",
   "profile_tags": {
+    "content_theme": {
+      "primary_vertical": "AI工具",
+      "sub_direction": "AI效率工具"
+    },
+    "content_style": {
+      "audience_level": "进阶向",
+      "sentence_pattern": "教程型",
+      "tone": "干货严肃"
+    },
+    "seeding_traits": {
+      "seeding_tendency": "纯干货",
+      "suitable_ad_type": "工具软件类"
+    },
+    "engagement_traits": {
+      "fan_activity": "中活跃",
+      "content_burst": "爆款型",
+      "seeding_efficiency": "均衡型"
+    },
+    "account_health": {
+      "update_freq": "高频",
+      "content_verticality": "高垂直",
+      "engagement_authenticity": "正常"
+    },
+    "collab_fit": {
+      "recommended_scenario": "产品教程",
+      "brand_tone_match": "专业科技品牌"
+    },
     "follower_tier": "素人",
-    "primary_vertical": "AI工具",
-    "secondary_vertical": null,
-    "content_style": "干货教程",
-    "content_consistency": "低",
-    "engagement_quality": "中",
     "content_format": "图文为主",
-    "commercial_stage": "起步期",
-    "tagged_at": "2026-04-13"
+    "tagged_at": "2026-04-16"
   }
 };

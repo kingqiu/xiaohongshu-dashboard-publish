@@ -5,6 +5,43 @@ var currentSourceId = null;
 var chartTrend = null, chartStructure = null;
 var currentSortKey = 'engage', currentSortBtn = null;
 
+// ─── 标签体系 2.0：6 大类 15 维映射 ─────────────────────────
+var TAG_CATEGORIES = [
+  { key: 'content_theme', label: '内容主题', emoji: '🎯', color: '#ff4d6a', cssClass: 'tc-content',
+    fields: [
+      { key: 'primary_vertical', label: '主垂类' },
+      { key: 'sub_direction', label: '内容细分方向' }
+    ]},
+  { key: 'content_style', label: '内容风格', emoji: '✍️', color: '#4d7fff', cssClass: 'tc-style',
+    fields: [
+      { key: 'audience_level', label: '受众门槛' },
+      { key: 'sentence_pattern', label: '内容句式' },
+      { key: 'tone', label: '内容调性' }
+    ]},
+  { key: 'seeding_traits', label: '种草特征', emoji: '🌱', color: '#4dff88', cssClass: 'tc-seed',
+    fields: [
+      { key: 'seeding_tendency', label: '种草倾向' },
+      { key: 'suitable_ad_type', label: '适合投放类型' }
+    ]},
+  { key: 'engagement_traits', label: '互动特征', emoji: '📊', color: '#6366f1', cssClass: 'tc-interact',
+    fields: [
+      { key: 'fan_activity', label: '粉丝活跃度' },
+      { key: 'content_burst', label: '内容爆发力' },
+      { key: 'seeding_efficiency', label: '种草效率' }
+    ]},
+  { key: 'account_health', label: '账号健康度', emoji: '💚', color: '#22c55e', cssClass: 'tc-health',
+    fields: [
+      { key: 'update_freq', label: '更新频率' },
+      { key: 'content_verticality', label: '内容垂直度' },
+      { key: 'engagement_authenticity', label: '互动真实性' }
+    ]},
+  { key: 'collab_fit', label: '合作适配度', emoji: '🤝', color: '#f59e0b', cssClass: 'tc-collab',
+    fields: [
+      { key: 'recommended_scenario', label: '推荐合作场景' },
+      { key: 'brand_tone_match', label: '品牌调性匹配' }
+    ]}
+];
+
 // 安全销毁 Chart.js 图表：同时清理变量引用和 canvas 内部残留引用
 function safeDestroyChart(chartRef, canvasId) {
   try {
@@ -196,15 +233,8 @@ function render() {
   document.getElementById('kpi-comment-ratio').textContent = (avgCommentRatio * 100).toFixed(1) + '%';
   document.getElementById('kpi-score').textContent = avgScore;
 
-  // 副标题
-  var subtitleText = '共 ' + data.length + ' 篇笔记';
-  if (currentMeta && currentMeta.nickname) {
-    subtitleText = currentMeta.nickname + ' · ' + subtitleText;
-    if (currentMeta.followers) {
-      subtitleText += ' · 粉丝 ' + fmt(currentMeta.followers);
-    }
-  }
-  document.getElementById('subtitle').textContent = subtitleText;
+  // 区块 2：账号基础信息卡片
+  renderProfileInfoCard(currentMeta, data.length);
 
   // 智能分析
   var analysisBody = document.getElementById('analysis-body');
@@ -214,8 +244,8 @@ function render() {
     analysisBody.textContent = '暂无分析数据';
   }
 
-  // 账号画像标签
-  renderProfileTags(currentMeta);
+  // 区块 6：标签体系 2.0
+  renderTagPanel(currentMeta);
 
   // ─── 图表渲染（每个图表独立 try-catch，防止一个失败影响其他） ───
 
@@ -364,43 +394,183 @@ function sortTable(key, btn) {
   }).join('');
 }
 
-// ─── 账号画像标签渲染 ─────────────────────────────────────────
-function renderProfileTags(meta) {
-  var card = document.getElementById('profile-card');
-  var container = document.getElementById('profile-tags');
-  var footer = document.getElementById('profile-footer');
+// ─── 区块 2：账号基础信息卡片渲染 ───────────────────────────────
+function renderProfileInfoCard(meta, noteCount) {
+  var container = document.getElementById('profile-info-card');
+  if (!container) return;
 
-  if (!meta || !meta.profile_tags) {
-    card.style.display = 'none';
+  if (!meta || !meta.nickname) {
+    container.innerHTML = '<p style="font-size:13px;color:#666;margin-bottom:16px">共 ' + noteCount + ' 篇笔记</p>';
     return;
   }
 
-  card.style.display = 'block';
-  var t = meta.profile_tags;
+  var avatarChar = meta.nickname.charAt(0);
+  var t = meta.profile_tags || {};
 
-  // 标签配置：[维度key, 显示名, css类前缀, emoji]
-  var tagDefs = [
-    { key: 'follower_tier',       label: '量级',   cls: 'tier-' + t.follower_tier,           icon: '👥' },
-    { key: 'primary_vertical',    label: '主垂类', cls: 'vertical',                          icon: '📌' },
-    { key: 'secondary_vertical',  label: '次垂类', cls: 'vertical',                          icon: '📎' },
-    { key: 'content_style',       label: '风格',   cls: 'style',                             icon: '✍️' },
-    { key: 'content_consistency', label: '垂直度', cls: 'consistency-' + t.content_consistency, icon: '🎯' },
-    { key: 'engagement_quality',  label: '互动质量', cls: 'quality-' + t.engagement_quality,  icon: '⚡' },
-    { key: 'content_format',      label: '形式',   cls: 'format',                            icon: '📄' },
-    { key: 'commercial_stage',    label: '阶段',   cls: 'stage',                             icon: '📈' },
+  var html = '<div class="profile-info-card">'
+    + '<div class="profile-main">'
+    + '<div class="profile-left">'
+    + '<div class="avatar">' + avatarChar + '</div>'
+    + '<div class="profile-info">'
+    + '<h2>' + meta.nickname + '</h2>'
+    + '<div class="profile-meta-row">';
+
+  if (meta.xhs_id) html += '<span>小红书号 ' + meta.xhs_id + '</span>';
+  if (meta.location) html += '<span>IP属地 ' + meta.location + '</span>';
+
+  html += '</div>';
+
+  if (meta.bio) html += '<div class="profile-bio">' + meta.bio + '</div>';
+
+  html += '</div></div>'  // close .profile-info, .profile-left
+    + '<div class="profile-stats">';
+
+  var stats = [
+    { num: meta.followers, label: '粉丝', accent: true },
+    { num: meta.following, label: '关注', accent: false },
+    { num: meta.total_likes_and_saves || meta.total_likes, label: '获赞与收藏', accent: true },
+    { num: meta.notes_count, label: '笔记', accent: false }
   ];
 
-  var html = '';
+  stats.forEach(function(s) {
+    if (s.num === undefined || s.num === null) return;
+    html += '<div class="profile-stat-item">'
+      + '<div class="profile-stat-num' + (s.accent ? ' accent' : '') + '">' + fmt(s.num) + '</div>'
+      + '<div class="profile-stat-label">' + s.label + '</div>'
+      + '</div>';
+  });
+
+  html += '</div></div>';  // close .profile-stats, .profile-main
+
+  // 底部胶囊标签
+  if (t.follower_tier || t.content_format) {
+    html += '<div class="profile-badges">';
+    if (t.follower_tier) {
+      html += '<span class="pbadge pbadge-tier">🧑 ' + t.follower_tier;
+      if (meta.followers !== undefined && meta.followers !== null) {
+        if (meta.followers < 1000) html += ' <1k粉';
+        else if (meta.followers < 10000) html += ' ' + fmt(meta.followers) + '粉';
+        else html += ' ' + fmt(meta.followers) + '粉';
+      }
+      html += '</span>';
+    }
+    if (t.content_format) {
+      html += '<span class="pbadge pbadge-format">📄 ' + t.content_format + '</span>';
+    }
+    html += '</div>';
+  }
+
+  html += '</div>';  // close .profile-info-card
+  container.innerHTML = html;
+}
+
+// ─── 区块 6：标签体系 2.0 渲染 ──────────────────────────────────
+function isV2Tags(tags) {
+  // v2.0 的 profile_tags 含有 content_theme 对象
+  return tags && typeof tags.content_theme === 'object' && tags.content_theme !== null;
+}
+
+function renderTagPanel(meta) {
+  var container = document.getElementById('tag-panel');
+  if (!container) return;
+
+  if (!meta || !meta.profile_tags) {
+    container.innerHTML = '';
+    return;
+  }
+
+  var t = meta.profile_tags;
+
+  // v1.0 降级显示
+  if (!isV2Tags(t)) {
+    renderTagPanelV1Fallback(container, t);
+    return;
+  }
+
+  // v2.0 标签体系
+  var colorMap = {
+    content_theme: '#ff4466',
+    content_style: '#5b8def',
+    seeding_traits: '#34d399',
+    engagement_traits: '#a78bfa',
+    account_health: '#10b981',
+    collab_fit: '#fbbf24'
+  };
+
+  var html = '<div class="tag-panel">'
+    + '<div class="tag-panel-heading">🏷️ 账号画像标签 · 6 大维度 15 项指标</div>'
+    + '<div class="tag-panel-sub">基于内容语义分析 + 量化指标自动生成的多维标签画像</div>'
+    + '<div class="tag-grid">';
+
+  TAG_CATEGORIES.forEach(function(cat) {
+    var catData = t[cat.key];
+    if (!catData || typeof catData !== 'object') return;
+
+    html += '<div class="tag-grid-row ' + cat.cssClass + '">';
+    html += '<div class="tag-cat ' + cat.cssClass + '">'
+      + '<span class="tag-cat-dot" style="background:' + (colorMap[cat.key] || cat.color) + '"></span> '
+      + cat.emoji + ' ' + cat.label
+      + '</div>';
+
+    // 每个类别最多 3 组字段，Grid 有 3 组 attr-name + val 列
+    var maxFields = 3;
+    for (var i = 0; i < maxFields; i++) {
+      if (i < cat.fields.length) {
+        var field = cat.fields[i];
+        var val = catData[field.key];
+        html += '<div class="tag-attr-name">' + field.label + '</div>';
+        html += '<div class="tag-val">';
+        if (val && val !== '未知' && val !== 'null') {
+          html += '<span class="tag-pill">' + val + '</span>';
+        }
+        html += '</div>';
+      } else {
+        // 空占位
+        html += '<div class="tag-attr-name"></div><div class="tag-val"></div>';
+      }
+    }
+
+    html += '</div>';  // close .tag-grid-row
+  });
+
+  html += '</div>';  // close .tag-grid
+
+  // 打标时间
+  html += '<div class="tag-footer">打标时间：' + (t.tagged_at || '未知') + ' · 由 GLM + 量化指标自动生成（v2.0）</div>';
+  html += '</div>';  // close .tag-panel
+  container.innerHTML = html;
+}
+
+// v1.0 降级显示（旧数据格式兼容）
+function renderTagPanelV1Fallback(container, t) {
+  var html = '<div class="tag-panel">'
+    + '<div class="tag-panel-heading">🏷️ 账号画像</div>'
+    + '<div class="tag-panel-sub">标签体系 v1.0 — 后续升级后将自动展示 6 维 15 项标签</div>'
+    + '<div class="tag-v1-fallback" style="display:flex;flex-wrap:wrap;gap:8px">';
+
+  var tagDefs = [
+    { key: 'follower_tier',       label: '量级',   icon: '👥' },
+    { key: 'primary_vertical',    label: '主垂类', icon: '📌' },
+    { key: 'secondary_vertical',  label: '次垂类', icon: '📎' },
+    { key: 'content_style',       label: '风格',   icon: '✍️' },
+    { key: 'content_consistency', label: '垂直度', icon: '🎯' },
+    { key: 'engagement_quality',  label: '互动质量', icon: '⚡' },
+    { key: 'content_format',      label: '形式',   icon: '📄' },
+    { key: 'commercial_stage',    label: '阶段',   icon: '📈' },
+  ];
+
   tagDefs.forEach(function(def) {
     var val = t[def.key];
     if (!val || val === '未知' || val === 'null') return;
-    html += '<span class="tag-badge ' + def.cls + '">'
+    html += '<span style="display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:500;white-space:nowrap;background:rgba(100,100,100,0.15);color:#9ca3af;border:1px solid #444">'
           + def.icon + ' ' + def.label + '：' + val
           + '</span>';
   });
 
+  html += '</div>';  // close .tag-v1-fallback
+  html += '<div class="tag-footer">打标时间：' + (t.tagged_at || '未知') + ' · 由 GLM + 量化指标自动生成（v1.0）</div>';
+  html += '</div>';  // close .tag-panel
   container.innerHTML = html;
-  footer.textContent = '打标时间：' + (t.tagged_at || '未知') + '  ·  由 GLM + 量化指标自动生成';
 }
 
 // ─── Tab 切换 ────────────────────────────────────────────────

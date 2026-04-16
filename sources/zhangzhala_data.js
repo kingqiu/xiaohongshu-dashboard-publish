@@ -323,14 +323,35 @@ var ZHANGZHALA_META = {
   "avg_score": 56,
   "analysis": "「张咋啦」账号的爆款内容集中在AI工具教程（如笔记1、3、5），兼具实用性与效率提升，平均收藏率48.6%远超行业均值，互动质量指数1.39显示高用户认可度。互动结构以收藏型为主（平均32.5%），辅以分享型（平均5.3%），评论互动比仅2.5%表明用户偏重内容价值而非深度交流。\n\n建议：1. 持续深化AI工具应用场景，如结合具体行业案例，提升内容差异化；2. 开发系列教程合集笔记，通过话题标签#AI学习攻略 策划内容矩阵，促进收藏转化评论互动。",
   "profile_tags": {
+    "content_theme": {
+      "primary_vertical": "AI工具",
+      "sub_direction": "AI效率工具"
+    },
+    "content_style": {
+      "audience_level": "进阶向",
+      "sentence_pattern": "教程型",
+      "tone": "干货严肃"
+    },
+    "seeding_traits": {
+      "seeding_tendency": "纯干货",
+      "suitable_ad_type": "工具软件类"
+    },
+    "engagement_traits": {
+      "fan_activity": "高活跃",
+      "content_burst": "波动型",
+      "seeding_efficiency": "高收藏型"
+    },
+    "account_health": {
+      "update_freq": "高频",
+      "content_verticality": "高垂直",
+      "engagement_authenticity": "正常"
+    },
+    "collab_fit": {
+      "recommended_scenario": "产品教程",
+      "brand_tone_match": "专业科技品牌"
+    },
     "follower_tier": "腰部达人",
-    "primary_vertical": "AI工具",
-    "secondary_vertical": null,
-    "content_style": "干货教程",
-    "content_consistency": "低",
-    "engagement_quality": "中",
     "content_format": "图文为主",
-    "commercial_stage": "发展期",
-    "tagged_at": "2026-04-13"
+    "tagged_at": "2026-04-16"
   }
 };

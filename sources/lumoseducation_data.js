@@ -323,14 +323,35 @@ var LUMOSEDUCATION_META = {
   "avg_score": 48,
   "analysis": "LUMOS EDUCATION账号的爆款内容集中于展示「师资团队」（悉尼顶级师资团队笔记出现2次），这类内容平均互动质量指数（2.68）和综合评分（76）远超其他笔记，表明高价值师资介绍能有效吸引粉丝。互动结构上，收藏率（21.9%）高于评论率（8.2%），但TOP笔记均以评论量见长（平均8.2%），显示内容兼具实用性（收藏）和话题性（评论）。\n\n建议：1）持续深化师资团队内容，突出专业背景与教学成果，结合「地域+师资」标签强化搜索曝光；2）增加互动引导，如发起「你希望了解哪个国家教育体系」投票，提升评论率，优化互动结构平衡。",
   "profile_tags": {
+    "content_theme": {
+      "primary_vertical": "教育",
+      "sub_direction": "K12"
+    },
+    "content_style": {
+      "audience_level": "小白向",
+      "sentence_pattern": "清单型",
+      "tone": "干货严肃"
+    },
+    "seeding_traits": {
+      "seeding_tendency": "中性分享",
+      "suitable_ad_type": "课程教育"
+    },
+    "engagement_traits": {
+      "fan_activity": "中活跃",
+      "content_burst": "波动型",
+      "seeding_efficiency": "均衡型"
+    },
+    "account_health": {
+      "update_freq": "中频",
+      "content_verticality": "高垂直",
+      "engagement_authenticity": "正常"
+    },
+    "collab_fit": {
+      "recommended_scenario": "产品教程",
+      "brand_tone_match": "教育知识类"
+    },
     "follower_tier": "素人",
-    "primary_vertical": "教育",
-    "secondary_vertical": null,
-    "content_style": "干货教程",
-    "content_consistency": "低",
-    "engagement_quality": "中",
     "content_format": "图文为主",
-    "commercial_stage": "成长期",
-    "tagged_at": "2026-04-13"
+    "tagged_at": "2026-04-16"
   }
 };

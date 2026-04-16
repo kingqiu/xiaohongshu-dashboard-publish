@@ -32,28 +32,58 @@ h1{font-size:20px;font-weight:600;color:#fff;margin-bottom:4px}
 .analysis-title{font-size:14px;font-weight:600;color:#ccc;margin-bottom:12px;padding-left:12px}
 .analysis-body{font-size:13px;color:#bbb;line-height:1.8;padding-left:12px}
 .analysis-footer{font-size:11px;color:#555;margin-top:12px;padding-left:12px}
-.profile-card{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:10px;padding:20px;margin-bottom:24px}
-.profile-title{font-size:14px;font-weight:600;color:#ccc;margin-bottom:14px}
-.profile-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
-.tag-group{display:flex;align-items:center;gap:6px}
-.tag-group-label{font-size:11px;color:#555;white-space:nowrap}
-.tag-badge{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:500;white-space:nowrap}
-.tag-badge.tier-素人{background:rgba(100,100,100,0.2);color:#888;border:1px solid #444}
-.tag-badge.tier-KOC{background:rgba(59,130,246,0.15);color:#60a5fa;border:1px solid rgba(59,130,246,0.3)}
-.tag-badge.tier-尾部达人{background:rgba(16,185,129,0.15);color:#34d399;border:1px solid rgba(16,185,129,0.3)}
-.tag-badge.tier-腰部达人{background:rgba(245,158,11,0.15);color:#fbbf24;border:1px solid rgba(245,158,11,0.3)}
-.tag-badge.tier-头部达人{background:rgba(239,68,68,0.15);color:#f87171;border:1px solid rgba(239,68,68,0.3)}
-.tag-badge.vertical{background:rgba(168,85,247,0.15);color:#c084fc;border:1px solid rgba(168,85,247,0.3)}
-.tag-badge.style{background:rgba(20,184,166,0.15);color:#2dd4bf;border:1px solid rgba(20,184,166,0.3)}
-.tag-badge.quality-高{background:rgba(16,185,129,0.15);color:#34d399;border:1px solid rgba(16,185,129,0.3)}
-.tag-badge.quality-中{background:rgba(245,158,11,0.15);color:#fbbf24;border:1px solid rgba(245,158,11,0.3)}
-.tag-badge.quality-低{background:rgba(239,68,68,0.15);color:#f87171;border:1px solid rgba(239,68,68,0.3)}
-.tag-badge.consistency-高{background:rgba(16,185,129,0.15);color:#34d399;border:1px solid rgba(16,185,129,0.3)}
-.tag-badge.consistency-中{background:rgba(245,158,11,0.15);color:#fbbf24;border:1px solid rgba(245,158,11,0.3)}
-.tag-badge.consistency-低{background:rgba(239,68,68,0.15);color:#f87171;border:1px solid rgba(239,68,68,0.3)}
-.tag-badge.stage{background:rgba(99,102,241,0.15);color:#a5b4fc;border:1px solid rgba(99,102,241,0.3)}
-.tag-badge.format{background:rgba(100,100,100,0.15);color:#9ca3af;border:1px solid #444}
-.profile-footer{font-size:11px;color:#555;margin-top:4px}
+/* ── 区块 2：账号基础信息卡片（v2.0） ── */
+.profile-info-card{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;padding:24px 28px;margin-bottom:20px;position:relative;overflow:hidden}
+.profile-info-card::before{content:'';position:absolute;top:-80px;right:-40px;width:260px;height:260px;background:radial-gradient(circle,rgba(255,36,66,0.05) 0%,transparent 70%);pointer-events:none}
+.profile-main{display:flex;align-items:flex-start;justify-content:space-between;position:relative;z-index:1}
+.profile-left{display:flex;align-items:center;gap:18px}
+.avatar{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#c53070,#8b2fc0);display:flex;align-items:center;justify-content:center;font-size:28px;color:#fff;font-weight:700;flex-shrink:0}
+.profile-info h2{font-size:18px;font-weight:700;color:#fff;margin-bottom:5px;display:flex;align-items:center;gap:8px}
+.profile-meta-row{display:flex;gap:14px;font-size:12px;color:#666;margin-bottom:6px;flex-wrap:wrap}
+.profile-bio{font-size:12px;color:#666;max-width:400px;line-height:1.5}
+.profile-stats{display:flex;gap:28px;align-items:flex-start;padding-top:4px}
+.profile-stat-item{text-align:center;min-width:64px}
+.profile-stat-num{font-size:24px;font-weight:700;color:#fff;line-height:1.2;font-variant-numeric:tabular-nums}
+.profile-stat-num.accent{color:#ff4d6a}
+.profile-stat-label{font-size:11px;color:#666;margin-top:3px}
+.profile-badges{display:flex;gap:10px;margin-top:14px;padding-top:12px;border-top:1px solid #2a2a2a;position:relative;z-index:1}
+.pbadge{font-size:12px;padding:4px 12px;border-radius:20px;font-weight:500}
+.pbadge-tier{background:rgba(255,170,70,0.1);color:#ffaa46;border:1px solid rgba(255,170,70,0.2)}
+.pbadge-format{background:rgba(100,180,255,0.08);color:#64b4ff;border:1px solid rgba(100,180,255,0.15)}
+
+/* ── 区块 6：标签体系 2.0 网格列表 ── */
+.tag-panel{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;padding:20px 24px;margin-bottom:24px}
+.tag-panel-heading{font-size:15px;font-weight:700;color:#ccc;margin-bottom:4px}
+.tag-panel-sub{font-size:12px;color:#555;margin-bottom:16px}
+.tag-grid{display:grid;grid-template-columns:130px 90px auto 90px auto 80px auto;column-gap:8px;border-top:1px solid #2a2a2a}
+.tag-grid-row{display:contents}
+.tag-grid-row>*{display:flex;align-items:center;min-height:42px;border-bottom:1px solid #2a2a2a}
+.tag-grid-row:last-of-type>*{border-bottom:none}
+.tag-cat{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;padding-right:10px}
+.tag-cat-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.tag-attr-name{font-size:12px;color:#666;white-space:nowrap}
+.tag-val{display:flex;align-items:center}
+.tag-pill{font-size:12px;font-weight:600;padding:2px 8px;border-radius:4px;line-height:1.5;white-space:nowrap}
+.tag-cat.tc-content{color:#ff6688}
+.tag-cat.tc-style{color:#93c5fd}
+.tag-cat.tc-seed{color:#6ee7b7}
+.tag-cat.tc-interact{color:#c4b5fd}
+.tag-cat.tc-health{color:#6ee7b7}
+.tag-cat.tc-collab{color:#fde68a}
+.tc-content .tag-pill{background:rgba(255,68,102,0.1);color:#ff6688}
+.tc-style .tag-pill{background:rgba(91,141,239,0.1);color:#93c5fd}
+.tc-seed .tag-pill{background:rgba(52,211,153,0.1);color:#6ee7b7}
+.tc-interact .tag-pill{background:rgba(167,139,250,0.1);color:#c4b5fd}
+.tc-health .tag-pill{background:rgba(16,185,129,0.1);color:#6ee7b7}
+.tc-collab .tag-pill{background:rgba(251,191,36,0.1);color:#fde68a}
+.tag-footer{font-size:11px;color:#555;margin-top:12px;padding-top:10px;border-top:1px solid #2a2a2a}
+.tag-v1-fallback{font-size:12px;color:#666;padding:12px 0}
+
+/* ── v1.0 旧样式保留（降级兼容） ── */
+.profile-card-v1{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:10px;padding:20px;margin-bottom:24px}
+.profile-title-v1{font-size:14px;font-weight:600;color:#ccc;margin-bottom:14px}
+.profile-tags-v1{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.profile-footer-v1{font-size:11px;color:#555;margin-top:4px}
 .table-card{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:10px;padding:20px}
 .table-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
 .table-title{font-size:13px;font-weight:600;color:#ccc}
@@ -87,11 +117,35 @@ tr:hover td{background:#222}
   .chart-wrap-tall{height:220px}
 }
 
+/* ── 平板端适配（769px ~ 1100px） ────────────── */
+@media (max-width: 1100px) {
+  .tag-grid { grid-template-columns: 100px 80px auto 80px auto 70px auto; }
+  .tag-cat { font-size: 12px; }
+  .profile-main { flex-direction: column; gap: 16px; }
+  .profile-stats { align-self: flex-start; }
+}
+
 /* ── 移动端适配 ────────────────────────────────── */
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   body { padding: 14px 12px; overflow-x: hidden; }
 
-  /* KPI：5张卡排成 3+2（前3张一行，后2张各占50%） */
+  /* 区块 2：账号基础信息 */
+  .profile-info-card { padding: 16px; }
+  .profile-main { flex-direction: column; gap: 14px; }
+  .profile-left { gap: 12px; }
+  .avatar { width: 56px; height: 56px; font-size: 22px; }
+  .profile-info h2 { font-size: 16px; }
+  .profile-stats {
+    align-self: stretch;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .profile-stat-item { text-align: center; }
+  .profile-stat-num { font-size: 20px; }
+  .profile-meta-row { flex-wrap: wrap; gap: 6px; font-size: 11px; }
+
+  /* KPI：5张卡排成 3+2 */
   .kpi-grid {
     grid-template-columns: repeat(3, 1fr);
     gap: 8px;
@@ -100,13 +154,10 @@ tr:hover td{background:#222}
   .kpi-card:nth-child(5) {
     grid-column: span 1;
   }
-  /* 后两张卡整体居中：用子网格让第4、5张占满后两格 */
   .kpi-grid::after {
     content: '';
     display: none;
   }
-  /* 实际让4、5两张卡占 1.5列宽：改为2列+各自50% */
-  /* 简洁实现：后两张单独一行，各占1/2 */
   .kpi-card:nth-child(4) { grid-column: 1 / span 1; grid-row: 2; }
   .kpi-card:nth-child(5) { grid-column: 2 / span 1; grid-row: 2; }
 
@@ -117,7 +168,48 @@ tr:hover td{background:#222}
   /* 图表：两列变一列 */
   .charts-grid { grid-template-columns: 1fr; gap: 12px; }
 
-  /* 表格横向滚动（表格本身允许超出容器，容器截断） */
+  /* 区块 6：标签区 - 堆叠布局 */
+  .tag-panel { padding: 14px 16px; }
+  .tag-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .tag-grid-row {
+    display: flex !important;
+    flex-direction: column;
+    padding: 10px 0;
+    border-bottom: 1px solid #2a2a2a;
+  }
+  .tag-grid-row:last-child { border-bottom: none; }
+  .tag-grid-row > * {
+    border-bottom: none !important;
+    min-height: auto;
+  }
+  .tag-cat {
+    width: auto;
+    margin-bottom: 6px;
+    padding-left: 0;
+  }
+  .tag-attr-name, .tag-val {
+    display: inline-flex;
+    align-items: center;
+    min-height: auto;
+    padding: 0;
+  }
+  .tag-grid-row {
+    flex-wrap: wrap;
+  }
+  .tag-attr-name {
+    margin-left: 10px;
+    margin-bottom: 4px;
+  }
+  .tag-val {
+    margin-right: 10px;
+    margin-bottom: 4px;
+  }
+
+  /* 表格横向滚动 */
   .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: 100%; }
   table { min-width: 460px; width: max-content; }
   .note-title { max-width: 90px; }
@@ -130,13 +222,10 @@ tr:hover td{background:#222}
 
   /* 分析卡片字号 */
   .analysis-body { font-size: 12px; line-height: 1.7; }
-
-  /* 画像标签 */
-  .tag-badge { font-size: 11px; padding: 3px 8px; }
 }
 
-/* 平板端（641px ~ 900px）：KPI 改为 3 列，图表保持两列 */
-@media (min-width: 641px) and (max-width: 900px) {
+/* 平板端（769px ~ 900px）：KPI 改为 3 列 */
+@media (min-width: 769px) and (max-width: 900px) {
   .kpi-grid { grid-template-columns: repeat(3, 1fr); }
   .kpi-card:nth-child(4) { grid-column: 1 / span 1; }
   .kpi-card:nth-child(5) { grid-column: 2 / span 1; }
@@ -145,7 +234,7 @@ tr:hover td{background:#222}
 </head>
 <body>
 <div class="header-row"><h1>小红书数据看板</h1><select id="source-select" class="source-select"></select></div>
-<p class="subtitle" id="subtitle">加载中...</p>
+<div id="profile-info-card"></div>
 <div class="week-bar">
   <label>按周筛选：</label>
   <button class="week-btn active" onclick="filterWeek(null,this)">全部</button>
@@ -183,11 +272,7 @@ tr:hover td{background:#222}
   <div class="analysis-body" id="analysis-body">暂无分析数据</div>
   <div class="analysis-footer">由 AI 基于公开数据生成</div>
 </div>
-<div class="profile-card" id="profile-card" style="display:none">
-  <div class="profile-title">🏷️ 账号画像</div>
-  <div class="profile-tags" id="profile-tags"></div>
-  <div class="profile-footer" id="profile-footer"></div>
-</div>
+<div id="tag-panel"></div>
 <div class="table-card">
   <div class="table-header">
     <div class="table-title">笔记表现排行</div>
