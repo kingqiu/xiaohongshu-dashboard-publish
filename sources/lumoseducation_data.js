@@ -328,7 +328,7 @@ var LUMOSEDUCATION_META = {
       "sub_direction": "K12"
     },
     "content_style": {
-      "audience_level": "小白向",
+      "audience_level": "进阶向",
       "sentence_pattern": "清单型",
       "tone": "干货严肃"
     },
@@ -352,6 +352,6 @@ var LUMOSEDUCATION_META = {
     },
     "follower_tier": "素人",
     "content_format": "图文为主",
-    "tagged_at": "2026-04-16"
+    "tagged_at": "2026-04-20"
   }
 };

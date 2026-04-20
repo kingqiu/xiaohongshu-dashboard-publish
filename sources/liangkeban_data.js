@@ -337,5 +337,37 @@ var LIANGKEBAN_META = {
   "avg_quality_index": 1.56,
   "avg_comment_ratio": 0.049,
   "avg_score": 41,
-  "analysis": "「两克伴」账号内容呈现明显的技术干货属性，以实操教程和选型指南类笔记（如「nano banana pro技巧」「Gemma版本选」）表现突出，TOP5笔记收藏率均超50%，印证了深度、实用性内容易引发收藏型互动。互动结构以收藏主导（平均20.7%），评论占比仅4.9%，分享量偏低，说明内容价值感强但社交传播弱。建议：1.强化教程类内容深度与可视化呈现，提升收藏转化；2.在笔记中设置互动钩子（如投票、提问），刺激评论增长，平衡收藏与互动比。"
+  "analysis": "「两克伴」账号内容呈现明显的技术干货属性，以实操教程和选型指南类笔记（如「nano banana pro技巧」「Gemma版本选」）表现突出，TOP5笔记收藏率均超50%，印证了深度、实用性内容易引发收藏型互动。互动结构以收藏主导（平均20.7%），评论占比仅4.9%，分享量偏低，说明内容价值感强但社交传播弱。建议：1.强化教程类内容深度与可视化呈现，提升收藏转化；2.在笔记中设置互动钩子（如投票、提问），刺激评论增长，平衡收藏与互动比。",
+  "profile_tags": {
+    "content_theme": {
+      "primary_vertical": "AI工具",
+      "sub_direction": "AI效率工具"
+    },
+    "content_style": {
+      "audience_level": "进阶向",
+      "sentence_pattern": "教程型",
+      "tone": "干货严肃"
+    },
+    "seeding_traits": {
+      "seeding_tendency": "纯干货",
+      "suitable_ad_type": "工具软件类"
+    },
+    "engagement_traits": {
+      "fan_activity": "中活跃",
+      "content_burst": "爆款型",
+      "seeding_efficiency": "均衡型"
+    },
+    "account_health": {
+      "update_freq": "高频",
+      "content_verticality": "高垂直",
+      "engagement_authenticity": "正常"
+    },
+    "collab_fit": {
+      "recommended_scenario": "产品教程",
+      "brand_tone_match": "专业科技品牌"
+    },
+    "follower_tier": "素人",
+    "content_format": "图文为主",
+    "tagged_at": "2026-04-20"
+  }
 };

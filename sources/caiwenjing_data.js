@@ -337,5 +337,37 @@ var CAIWENJING_META = {
   "avg_quality_index": 1.21,
   "avg_comment_ratio": 0.057,
   "avg_score": 28,
-  "analysis": "蔡文静账号的爆款内容集中在高互动质量、高收藏率的实用性教程类笔记，如「炫一支可以当猪蹄啃的鸡腿」（收藏率10.3%），表明生活技巧、美食教程类内容最受欢迎。互动结构以收藏型为主（平均8.0%），辅以少量评论互动（平均5.7%），分享转化率（2.4%-16.8%）偏低，需优化传播动力。建议：1. 强化内容颗粒度，将爆款教程拆解为系列短教程，提升收藏转化；2. 增加互动引导，如评论区发起挑战赛，将收藏流量转化为评论/分享，平衡互动结构。"
+  "analysis": "蔡文静账号的爆款内容集中在高互动质量、高收藏率的实用性教程类笔记，如「炫一支可以当猪蹄啃的鸡腿」（收藏率10.3%），表明生活技巧、美食教程类内容最受欢迎。互动结构以收藏型为主（平均8.0%），辅以少量评论互动（平均5.7%），分享转化率（2.4%-16.8%）偏低，需优化传播动力。建议：1. 强化内容颗粒度，将爆款教程拆解为系列短教程，提升收藏转化；2. 增加互动引导，如评论区发起挑战赛，将收藏流量转化为评论/分享，平衡互动结构。",
+  "profile_tags": {
+    "content_theme": {
+      "primary_vertical": "时尚穿搭",
+      "sub_direction": "穿搭分享"
+    },
+    "content_style": {
+      "audience_level": "小白向",
+      "sentence_pattern": "清单型",
+      "tone": "轻松分享"
+    },
+    "seeding_traits": {
+      "seeding_tendency": "强种草",
+      "suitable_ad_type": "消费品"
+    },
+    "engagement_traits": {
+      "fan_activity": "高活跃",
+      "content_burst": "波动型",
+      "seeding_efficiency": "均衡型"
+    },
+    "account_health": {
+      "update_freq": "高频",
+      "content_verticality": "高垂直",
+      "engagement_authenticity": "正常"
+    },
+    "collab_fit": {
+      "recommended_scenario": "生活植入",
+      "brand_tone_match": "年轻潮流品牌"
+    },
+    "follower_tier": "头部达人",
+    "content_format": "图文为主",
+    "tagged_at": "2026-04-20"
+  }
 };

@@ -337,5 +337,37 @@ var ZHANGZHALA_META = {
   "avg_quality_index": 1.4,
   "avg_comment_ratio": 0.026000000000000002,
   "avg_score": 57,
-  "analysis": "「张咋啦」账号的爆款内容集中在实用工具、AI效率提升类，如「AI信息源Skill」笔记收藏率达48.6%，互动质量高，典型特征是强实用性与信息密度。互动结构以收藏型为主（平均34.2%），辅以分享型（平均11.3%），评论型占比较低（2.6%）。建议：\n1. 持续深化AI工具类内容，突出解决具体痛点，如增加“技能使用教程”系列，提升收藏转化；\n2. 开发互动话题引导评论，如“你用过最有用的AI工具”征集，平衡内容价值与互动深度。"
+  "analysis": "「张咋啦」账号的爆款内容集中在实用工具、AI效率提升类，如「AI信息源Skill」笔记收藏率达48.6%，互动质量高，典型特征是强实用性与信息密度。互动结构以收藏型为主（平均34.2%），辅以分享型（平均11.3%），评论型占比较低（2.6%）。建议：\n1. 持续深化AI工具类内容，突出解决具体痛点，如增加“技能使用教程”系列，提升收藏转化；\n2. 开发互动话题引导评论，如“你用过最有用的AI工具”征集，平衡内容价值与互动深度。",
+  "profile_tags": {
+    "content_theme": {
+      "primary_vertical": "AI工具",
+      "sub_direction": "AI效率工具"
+    },
+    "content_style": {
+      "audience_level": "进阶向",
+      "sentence_pattern": "教程型",
+      "tone": "干货严肃"
+    },
+    "seeding_traits": {
+      "seeding_tendency": "纯干货",
+      "suitable_ad_type": "工具软件类"
+    },
+    "engagement_traits": {
+      "fan_activity": "高活跃",
+      "content_burst": "波动型",
+      "seeding_efficiency": "高收藏型"
+    },
+    "account_health": {
+      "update_freq": "高频",
+      "content_verticality": "高垂直",
+      "engagement_authenticity": "正常"
+    },
+    "collab_fit": {
+      "recommended_scenario": "产品教程",
+      "brand_tone_match": "专业科技品牌"
+    },
+    "follower_tier": "腰部达人",
+    "content_format": "图文为主",
+    "tagged_at": "2026-04-20"
+  }
 };

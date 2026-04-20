@@ -337,5 +337,37 @@ var CHENZIHAHA_META = {
   "avg_quality_index": 1.28,
   "avg_comment_ratio": 0.064,
   "avg_score": 36,
-  "analysis": "「陈紫haha」账号的爆款笔记集中在穿搭、氛围感等视觉化内容，如「Vintage Noir」「Golden Glow」等，收藏率与综合评分均表现优异，证明高质量图片+氛围营造是关键。互动结构以收藏型为主（TOP5笔记收藏率均超10%），辅以评论型互动（平均评论/互动比6.4%），分享型互动相对较弱（平均分享量仅51）。建议：1. 强化视觉叙事，保持穿搭笔记的细节质感与故事性，提升收藏率；2. 适当增加互动引导，如提问式标题或评论区话题，提升评论/互动比，平衡各互动维度发展。"
+  "analysis": "「陈紫haha」账号的爆款笔记集中在穿搭、氛围感等视觉化内容，如「Vintage Noir」「Golden Glow」等，收藏率与综合评分均表现优异，证明高质量图片+氛围营造是关键。互动结构以收藏型为主（TOP5笔记收藏率均超10%），辅以评论型互动（平均评论/互动比6.4%），分享型互动相对较弱（平均分享量仅51）。建议：1. 强化视觉叙事，保持穿搭笔记的细节质感与故事性，提升收藏率；2. 适当增加互动引导，如提问式标题或评论区话题，提升评论/互动比，平衡各互动维度发展。",
+  "profile_tags": {
+    "content_theme": {
+      "primary_vertical": "时尚穿搭",
+      "sub_direction": "穿搭分享"
+    },
+    "content_style": {
+      "audience_level": "小白向",
+      "sentence_pattern": "清单型",
+      "tone": "轻松分享"
+    },
+    "seeding_traits": {
+      "seeding_tendency": "强种草",
+      "suitable_ad_type": "消费品"
+    },
+    "engagement_traits": {
+      "fan_activity": "中活跃",
+      "content_burst": "稳定型",
+      "seeding_efficiency": "均衡型"
+    },
+    "account_health": {
+      "update_freq": "高频",
+      "content_verticality": "高垂直",
+      "engagement_authenticity": "正常"
+    },
+    "collab_fit": {
+      "recommended_scenario": "生活植入",
+      "brand_tone_match": "生活方式品牌"
+    },
+    "follower_tier": "腰部达人",
+    "content_format": "图文为主",
+    "tagged_at": "2026-04-20"
+  }
 };
