@@ -12,5 +12,12 @@ var ZHANGZHALA_HISTORY = [
     "liked": 714772,
     "collected": 638273,
     "notes": 536
+  },
+  {
+    "date": "2026-04-26",
+    "fans": 269964,
+    "liked": 721177,
+    "collected": 643943,
+    "notes": 544
   }
 ];

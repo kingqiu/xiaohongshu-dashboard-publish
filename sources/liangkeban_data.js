@@ -6,14 +6,30 @@ var LIANGKEBAN_DATA = [
     "impressions": null,
     "views": null,
     "ctr": null,
-    "likes": 380,
+    "likes": 379,
     "comments": 44,
-    "saves": 626,
+    "saves": 630,
     "fans": null,
-    "shares": 155,
-    "save_rate": 0.52,
+    "shares": 156,
+    "save_rate": 0.521,
     "quality_index": 1.5,
-    "score": 66
+    "score": 67
+  },
+  {
+    "title": "这个海报生成提示词原地封神",
+    "date": "2026-04-26",
+    "type": null,
+    "impressions": null,
+    "views": null,
+    "ctr": null,
+    "likes": 2,
+    "comments": 0,
+    "saves": 0,
+    "fans": null,
+    "shares": 0,
+    "save_rate": 0.0,
+    "quality_index": 1.0,
+    "score": 9
   },
   {
     "title": "🦞装上这个技能帮你打败99%的演唱会黄牛",
@@ -56,12 +72,12 @@ var LIANGKEBAN_DATA = [
     "ctr": null,
     "likes": 3,
     "comments": 1,
-    "saves": 1,
+    "saves": 2,
     "fans": null,
     "shares": 0,
-    "save_rate": 0.2,
-    "quality_index": 1.6,
-    "score": 56
+    "save_rate": 0.33299999999999996,
+    "quality_index": 1.5,
+    "score": 65
   },
   {
     "title": "😱 AI 攻破网络安全最后一道防线？",
@@ -86,14 +102,14 @@ var LIANGKEBAN_DATA = [
     "impressions": null,
     "views": null,
     "ctr": null,
-    "likes": 7,
+    "likes": 8,
     "comments": 0,
-    "saves": 18,
+    "saves": 19,
     "fans": null,
     "shares": 5,
-    "save_rate": 0.6,
-    "quality_index": 1.5,
-    "score": 65
+    "save_rate": 0.594,
+    "quality_index": 1.47,
+    "score": 64
   },
   {
     "title": "💰这家神仙公司如何做到99.5%员工都用AI？",
@@ -118,13 +134,13 @@ var LIANGKEBAN_DATA = [
     "impressions": null,
     "views": null,
     "ctr": null,
-    "likes": 79,
+    "likes": 82,
     "comments": 7,
-    "saves": 218,
+    "saves": 225,
     "fans": null,
-    "shares": 42,
-    "save_rate": 0.63,
-    "quality_index": 1.42,
+    "shares": 45,
+    "save_rate": 0.627,
+    "quality_index": 1.43,
     "score": 63
   },
   {
@@ -136,12 +152,12 @@ var LIANGKEBAN_DATA = [
     "ctr": null,
     "likes": 18,
     "comments": 0,
-    "saves": 32,
+    "saves": 33,
     "fans": null,
-    "shares": 5,
-    "save_rate": 0.5820000000000001,
-    "quality_index": 1.27,
-    "score": 54
+    "shares": 6,
+    "save_rate": 0.579,
+    "quality_index": 1.32,
+    "score": 57
   },
   {
     "title": "AI 重塑组织：Block 的\"智能体公司\"实验",
@@ -150,14 +166,14 @@ var LIANGKEBAN_DATA = [
     "impressions": null,
     "views": null,
     "ctr": null,
-    "likes": 6,
+    "likes": 7,
     "comments": 2,
-    "saves": 18,
+    "saves": 19,
     "fans": null,
     "shares": 2,
-    "save_rate": 0.643,
-    "quality_index": 1.43,
-    "score": 63
+    "save_rate": 0.633,
+    "quality_index": 1.4,
+    "score": 61
   },
   {
     "title": "axios被投毒！建议所有养🦞的朋友立即自检",
@@ -302,22 +318,6 @@ var LIANGKEBAN_DATA = [
     "save_rate": 0.28600000000000003,
     "quality_index": 2.71,
     "score": 75
-  },
-  {
-    "title": "想知道龙虾有多了解你，问这三个问题就够了",
-    "date": "2026-03-13",
-    "type": null,
-    "impressions": null,
-    "views": null,
-    "ctr": null,
-    "likes": 2,
-    "comments": 0,
-    "saves": 0,
-    "fans": null,
-    "shares": 0,
-    "save_rate": 0.0,
-    "quality_index": 1.0,
-    "score": 9
   }
 ];
 
@@ -326,18 +326,18 @@ var LIANGKEBAN_META = {
   "xhs_id": 195768272,
   "bio": "探寻智能商业的魅力",
   "location": "广东",
-  "followers": 214,
+  "followers": 215,
   "following": 61,
-  "notes_count": 85,
-  "total_likes": 1348,
-  "total_saves": 2069,
-  "total_likes_and_saves": 3417,
-  "total_engagement": 1721,
-  "avg_save_rate": 0.207,
+  "notes_count": 86,
+  "total_likes": 1353,
+  "total_saves": 2083,
+  "total_likes_and_saves": 3436,
+  "total_engagement": 1745,
+  "avg_save_rate": 0.213,
   "avg_quality_index": 1.56,
-  "avg_comment_ratio": 0.049,
-  "avg_score": 41,
-  "analysis": "「两克伴」账号内容呈现明显的技术干货属性，以实操教程和选型指南类笔记（如「nano banana pro技巧」「Gemma版本选」）表现突出，TOP5笔记收藏率均超50%，印证了深度、实用性内容易引发收藏型互动。互动结构以收藏主导（平均20.7%），评论占比仅4.9%，分享量偏低，说明内容价值感强但社交传播弱。建议：1.强化教程类内容深度与可视化呈现，提升收藏转化；2.在笔记中设置互动钩子（如投票、提问），刺激评论增长，平衡收藏与互动比。",
+  "avg_comment_ratio": 0.047,
+  "avg_score": 42,
+  "analysis": "「两克伴」账号的爆款笔记集中在AI工具教程类，如「nano banana pro」收藏率达52.1%，互动质量高，体现实用教程受欢迎。内容以收藏型为主（平均收藏率21.3%），但评论/互动比仅4.7%，说明粉丝偏好静默学习，分享行为较弱。建议：1. 持续深化AI工具实操类内容，提升收藏转化；2. 增加互动引导，如发起工具使用投票或对比测评，提升评论活跃度。",
   "profile_tags": {
     "content_theme": {
       "primary_vertical": "AI工具",
@@ -368,6 +368,6 @@ var LIANGKEBAN_META = {
     },
     "follower_tier": "素人",
     "content_format": "图文为主",
-    "tagged_at": "2026-04-20"
+    "tagged_at": "2026-04-26"
   }
 };
