@@ -47,6 +47,6 @@ var LIANGKEBAN_HISTORY = [
     "liked": 2727,
     "collected": 4125,
     "notes": 180,
-    "collected_at": "2026-10-22T21:43:50+08:00"
+    "collected_at": "2026-10-22T21:56:28+08:00"
   }
 ];

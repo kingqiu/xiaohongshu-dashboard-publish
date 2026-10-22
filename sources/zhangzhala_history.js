@@ -43,10 +43,10 @@ var ZHANGZHALA_HISTORY = [
   },
   {
     "date": "2026-10-22",
-    "fans": 376205,
-    "liked": 943814,
-    "collected": 876904,
+    "fans": 376210,
+    "liked": 943818,
+    "collected": 876908,
     "notes": 593,
-    "collected_at": "2026-10-22T21:43:57+08:00"
+    "collected_at": "2026-10-22T21:56:34+08:00"
   }
 ];
