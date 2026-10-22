@@ -60,17 +60,24 @@ function findMonitoredAccount(userId) {
   }) || null;
 }
 
+function githubAccountUrl(destination) {
+  // 私有仓库在未登录时返回 404；先登录，再完整返回预填表单或申请列表。
+  var login = new URL('https://github.com/login');
+  login.searchParams.set('return_to', destination);
+  return login.href;
+}
+
 function buildAccountIssueUrl(profileUrl, nickname) {
   var url = new URL('https://github.com/kingqiu/xiaohongshu-dashboard/issues/new');
   url.searchParams.set('title', '添加监测账号：' + nickname);
   url.searchParams.set('body', '<!-- xhs-monitor-request:v1 -->\n### 账号主页\n' + profileUrl + '\n\n### 核对昵称\n' + nickname);
-  return url.href;
+  return githubAccountUrl(url.href);
 }
 
 function accountProgressUrl(nickname) {
   var url = new URL('https://github.com/kingqiu/xiaohongshu-dashboard/issues');
   url.searchParams.set('q', 'is:issue in:title 添加监测账号：' + nickname);
-  return url.href;
+  return githubAccountUrl(url.href);
 }
 
 function isValidDataDate(value) {
