@@ -17,7 +17,9 @@ h1{font-size:20px;font-weight:600;color:#fff;margin-bottom:4px}
 .account-button:hover{border-color:#888;color:#fff}
 .account-button:focus-visible,.account-link:focus-visible{outline:2px solid #ff6b81;outline-offset:3px}
 .account-button.primary{background:#ff2442;border-color:#ff2442;color:#fff}
-.account-button[aria-disabled="true"]{opacity:.45;cursor:not-allowed}
+.account-button[aria-disabled="true"],.account-button:disabled{opacity:.45;cursor:not-allowed}
+.account-button.remove-action{color:#ff9bad;border-color:#75404a}
+.account-button.danger{background:#b92940;border-color:#b92940;color:#fff}
 .account-pending{font-size:12px;color:#aaa;line-height:1.7;margin-top:10px;overflow-wrap:anywhere}
 .account-link{color:#ff8fa0;text-decoration:underline;text-underline-offset:3px}
 .account-dialog{position:fixed;margin:auto;width:calc(100% - 32px);max-width:520px;max-height:calc(100dvh - 32px);overflow:auto;background:#1a1a1a;color:#e0e0e0;border:1px solid #444;border-radius:12px;padding:24px;box-shadow:0 20px 80px #0009}
@@ -40,6 +42,12 @@ body.account-modal-open{overflow:hidden}
 .account-confirm input{margin-top:4px;accent-color:#ff2442;flex-shrink:0}
 .account-dialog-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
 .account-dialog [hidden],.account-pending[hidden]{display:none}
+.remove-account-name{font-size:16px;color:#fff;overflow-wrap:anywhere;margin-bottom:6px}
+.remove-account-profile{overflow-wrap:anywhere}
+.empty-state{border:1px solid #333;background:#1a1a1a;border-radius:12px;padding:48px 24px;text-align:center;margin-top:20px}
+.empty-state h2{font-size:18px;color:#fff;margin-bottom:10px}
+.empty-state p{font-size:13px;color:#aaa;line-height:1.8;margin-bottom:20px}
+.empty-state[hidden],#dashboard-content[hidden]{display:none}
 .subtitle{font-size:13px;color:#666;margin-bottom:16px}
 .data-freshness{font-size:12px;line-height:1.7;color:#aaa;margin:10px 0 16px;padding:10px 12px;border:1px solid #333;border-radius:6px}
 .data-freshness.is-warning{color:#facc78;background:#2a2217;border-color:#624d25}
@@ -247,8 +255,9 @@ tr:hover td{background:#222}
 
   /* header：账号选择器换行 */
   .header-row { flex-wrap: wrap; gap: 8px; }
-  .header-actions{width:100%}
-  .source-select{min-width:0;flex:1}
+  .header-actions{width:100%;flex-wrap:wrap}
+  .source-select{min-width:0;flex:1 0 100%}
+  .header-actions .account-button{flex:1}
   .account-dialog{padding:20px 16px}
   .account-dialog-actions .account-button{flex:1}
 
@@ -273,13 +282,17 @@ tr:hover td{background:#222}
   <div class="header-actions">
     <select id="source-select" class="source-select" aria-label="选择监测账号"></select>
     <button id="add-account-button" class="account-button" type="button">＋ 添加账号</button>
+    <button id="remove-account-button" class="account-button remove-action" type="button" disabled>移除账号</button>
   </div>
 </div>
 <div id="account-pending" class="account-pending" role="status" aria-live="polite" hidden>
   <span id="account-pending-text"></span> <a id="account-progress-link" class="account-link" target="_blank" rel="noopener noreferrer">查看添加进度</a>
   <button id="account-pending-dismiss" class="account-close" type="button" aria-label="关闭添加进度提示">×</button>
 </div>
-<div id="data-freshness" class="data-freshness" role="status" aria-live="polite">正在确认数据时间…</div>
+<div id="remove-account-pending" class="account-pending" role="status" aria-live="polite" hidden>
+  <span id="remove-account-pending-text"></span> <a id="remove-account-progress-link" class="account-link" target="_blank" rel="noopener noreferrer">查看移除进度</a>
+  <button id="remove-account-pending-dismiss" class="account-close" type="button" aria-label="关闭移除进度提示">×</button>
+</div>
 <dialog id="account-dialog" class="account-dialog" aria-labelledby="account-dialog-title" aria-describedby="account-dialog-help">
   <div class="account-dialog-heading">
     <h2 id="account-dialog-title">添加监测账号</h2>
@@ -309,6 +322,33 @@ tr:hover td{background:#222}
     </div>
   </form>
 </dialog>
+<dialog id="remove-account-dialog" class="account-dialog" aria-labelledby="remove-account-dialog-title" aria-describedby="remove-account-dialog-help">
+  <div class="account-dialog-heading">
+    <h2 id="remove-account-dialog-title">移除监测账号</h2>
+    <button id="remove-account-dialog-close" class="account-close" type="button" aria-label="关闭移除账号">×</button>
+  </div>
+  <p id="remove-account-dialog-help" class="account-help">处理通过后，停止后续采集并从监测列表移除；历史记录保留。下一步会打开 GitHub，由你确认提交。</p>
+  <div class="account-review">
+    <h3 id="remove-account-name" class="remove-account-name"></h3>
+    <p id="remove-account-current-name" hidden></p>
+    <a id="remove-account-profile" class="account-link remove-account-profile" target="_blank" rel="noopener noreferrer">打开主页核对 ↗</a>
+    <p id="remove-account-homepage"></p>
+    <p id="remove-account-collected-at"></p>
+  </div>
+  <label class="account-confirm"><input id="remove-account-confirm" type="checkbox"><span id="remove-account-confirm-text">我确认移除上面这个账号</span></label>
+  <p id="remove-account-validation" class="account-validation" role="status" aria-live="polite"></p>
+  <div class="account-dialog-actions">
+    <button id="remove-account-cancel" class="account-button" type="button">取消</button>
+    <a id="remove-account-submit" class="account-button danger" target="_blank" rel="noopener noreferrer" aria-disabled="true" tabindex="-1">前往 GitHub 确认移除 ↗</a>
+  </div>
+</dialog>
+<section id="empty-state" class="empty-state" hidden>
+  <h2>还没有监测账号</h2>
+  <p>添加一个小红书账号，首次采集通过后即可查看数据。已有历史记录仍保留。</p>
+  <button id="empty-add-account-button" class="account-button primary" type="button">＋ 添加第一个账号</button>
+</section>
+<main id="dashboard-content">
+<div id="data-freshness" class="data-freshness" role="status" aria-live="polite">正在确认数据时间…</div>
 <div id="profile-info-card"></div>
 <div class="week-bar">
   <label>按周筛选：</label>
@@ -368,6 +408,7 @@ tr:hover td{background:#222}
     <tbody id="table-body"></tbody>
   </table></div>
 </div>
+</main>
 <script src="chart.min.js"></script>
 <script src="sources/registry.js"></script>
 <script src="sources/liangkeban_data.js"></script>
@@ -380,6 +421,6 @@ tr:hover td{background:#222}
 <script src="sources/chenzihaha_history.js"></script>
 <script src="sources/zhangzhala_history.js"></script>
 <script src="sources/lumoseducation_history.js"></script>
-<script src="app.js?v=20261022-monitor-2"></script>
+<script src="app.js?v=20261022-manage-1"></script>
 </body>
 </html>

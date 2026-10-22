@@ -80,6 +80,39 @@ function accountProgressUrl(nickname) {
   return githubAccountUrl(url.href);
 }
 
+function monitoredAccountDetails(sourceId) {
+  var src = XHS_SOURCES.find(function(source) { return source.id === sourceId; });
+  if (!src) return null;
+  var meta = window[src.metaVar] || {};
+  var userId = String(meta.source_user_id || src.source_user_id || '').toLowerCase();
+  if (!/^[a-f0-9]{24}$/.test(userId)) return null;
+  var nickname;
+  // 移除请求核对已登记名称；主页昵称可能在采集后发生变化，UID 才是身份主键。
+  try { nickname = validateAccountNickname(src.label); }
+  catch (error) { return null; }
+  return {
+    sourceId: src.id, userId: userId, nickname: nickname,
+    currentNickname: typeof meta.nickname === 'string' ? meta.nickname : '',
+    profileUrl: 'https://www.xiaohongshu.com/user/profile/' + userId
+  };
+}
+
+function buildRemoveAccountIssueUrl(userId, nickname) {
+  if (typeof userId !== 'string' || !/^[a-f0-9]{24}$/i.test(userId)) throw new Error('无法确认要移除的账号主页。');
+  nickname = validateAccountNickname(nickname);
+  var url = new URL('https://github.com/kingqiu/xiaohongshu-dashboard/issues/new');
+  var profileUrl = 'https://www.xiaohongshu.com/user/profile/' + userId.toLowerCase();
+  url.searchParams.set('title', '移除监测账号：' + nickname);
+  url.searchParams.set('body', '<!-- xhs-monitor-remove:v1 -->\n### 账号主页\n' + profileUrl + '\n\n### 核对昵称\n' + nickname);
+  return githubAccountUrl(url.href);
+}
+
+function removeAccountProgressUrl(nickname) {
+  var url = new URL('https://github.com/kingqiu/xiaohongshu-dashboard/issues');
+  url.searchParams.set('q', 'is:issue in:title 移除监测账号：' + nickname);
+  return githubAccountUrl(url.href);
+}
+
 function isValidDataDate(value) {
   if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
   var date = new Date(value + 'T00:00:00Z');
@@ -125,6 +158,10 @@ function renderDataFreshness(sourceId) {
   if (invalidDates) message += '；' + invalidDates + ' 条笔记日期异常，已排除周分组与日期趋势';
   banner.textContent = message;
   banner.className = 'data-freshness' + (stale || failed || !isFinite(asOfTime) || invalidDates ? ' is-warning' : '');
+  var removeDialog = document.getElementById('remove-account-dialog');
+  if (removeDialog && removeDialog.open && removeDialog.dataset.sourceId === sourceId) {
+    document.getElementById('remove-account-collected-at').textContent = message;
+  }
 }
 
 // ─── 标签体系 2.0：6 大类 15 维映射 ─────────────────────────
@@ -192,6 +229,10 @@ function safeDestroyChart(chartRef, canvasId) {
   select.addEventListener('change', function() {
     loadSource(this.value);
   });
+  if (!XHS_SOURCES.length) {
+    renderEmptyDashboard();
+    return;
+  }
   loadSource(XHS_SOURCES[0].id);
   fetch('sources/refresh_status.json', { cache: 'no-store' })
     .then(function(response) {
@@ -205,13 +246,43 @@ function safeDestroyChart(chartRef, canvasId) {
     .catch(function() { renderDataFreshness(currentSourceId); });
 })();
 
+function updateRemovalAvailability() {
+  var button = document.getElementById('remove-account-button');
+  if (!button) return;
+  button.disabled = !monitoredAccountDetails(currentSourceId);
+  button.title = button.disabled && currentSourceId ? '该账号缺少可核对的主页信息，暂时无法移除' : '';
+}
+
+function renderEmptyDashboard() {
+  currentSourceId = null;
+  currentMeta = null;
+  allData = [];
+  currentData = [];
+  chartTrend = safeDestroyChart(chartTrend, 'chart-trend');
+  chartStructure = safeDestroyChart(chartStructure, 'chart-structure');
+  growthChart = safeDestroyChart(growthChart, 'chart-growth');
+  document.getElementById('dashboard-content').hidden = true;
+  document.getElementById('empty-state').hidden = false;
+  var select = document.getElementById('source-select');
+  select.innerHTML = '<option value="">暂无监测账号</option>';
+  select.disabled = true;
+  updateRemovalAvailability();
+}
+
 function loadSource(sourceId) {
   var src = XHS_SOURCES.find(function(s){ return s.id === sourceId; });
-  if (!src) return;
+  if (!src) {
+    if (!XHS_SOURCES.length) renderEmptyDashboard();
+    return;
+  }
 
   currentSourceId = sourceId;
-  allData = window[src.dataVar];
+  allData = window[src.dataVar] || [];
   currentMeta = window[src.metaVar] || null;
+  document.getElementById('dashboard-content').hidden = false;
+  document.getElementById('empty-state').hidden = true;
+  document.getElementById('source-select').disabled = false;
+  updateRemovalAvailability();
   renderDataFreshness(sourceId);
 
   // 重置周筛选
@@ -924,6 +995,7 @@ function renderGrowthChart(sourceId) {
     document.body.classList.add('account-modal-open');
     homepage.focus();
   });
+  document.getElementById('empty-add-account-button').addEventListener('click', function() { trigger.click(); });
   document.getElementById('account-dialog-close').addEventListener('click', closeDialog);
   document.getElementById('account-cancel').addEventListener('click', closeDialog);
   dialog.addEventListener('close', function() {
@@ -964,6 +1036,89 @@ function renderGrowthChart(sourceId) {
   try {
     var pending = JSON.parse(localStorage.getItem(storageKey) || 'null');
     if (pending && (pending.userId === null || /^[a-f0-9]{24}$/.test(pending.userId))) {
+      showPending({ userId: pending.userId, nickname: validateAccountNickname(pending.nickname) });
+    }
+  } catch (error) { /* 忽略过期或不可用的本地草稿 */ }
+})();
+
+// ─── 移除监测账号：固定核对对象，打开申请不会改变当前列表 ───
+(function initRemoveAccountManager() {
+  var dialog = document.getElementById('remove-account-dialog');
+  var trigger = document.getElementById('remove-account-button');
+  if (!dialog || !trigger) return;
+  var confirmation = document.getElementById('remove-account-confirm');
+  var submit = document.getElementById('remove-account-submit');
+  var storageKey = 'xhs-pending-removal-v1';
+  var removalAccount = null;
+
+  function showPending(pending) {
+    var banner = document.getElementById('remove-account-pending');
+    if (!pending || !findMonitoredAccount(pending.userId)) {
+      banner.hidden = true;
+      if (pending) {
+        try { localStorage.removeItem(storageKey); } catch (error) { /* 存储不可用不影响看板 */ }
+      }
+      return;
+    }
+    document.getElementById('remove-account-pending-text').textContent = '“' + pending.nickname + '” 的移除申请尚未确认结果。';
+    document.getElementById('remove-account-progress-link').href = removeAccountProgressUrl(pending.nickname);
+    banner.hidden = false;
+  }
+
+  function updateConfirmation() {
+    var current = monitoredAccountDetails(currentSourceId);
+    var sameAccount = removalAccount && current && removalAccount.sourceId === current.sourceId
+      && removalAccount.userId === current.userId && removalAccount.nickname === current.nickname;
+    var ready = !!(sameAccount && confirmation.checked);
+    document.getElementById('remove-account-validation').textContent = sameAccount ? '' : '当前账号已变化，请关闭后重新确认。';
+    submit.setAttribute('aria-disabled', ready ? 'false' : 'true');
+    submit.tabIndex = ready ? 0 : -1;
+    if (ready) submit.href = buildRemoveAccountIssueUrl(removalAccount.userId, removalAccount.nickname);
+    else submit.removeAttribute('href');
+    return ready;
+  }
+
+  function closeDialog() { dialog.close(); }
+  trigger.addEventListener('click', function() {
+    removalAccount = monitoredAccountDetails(currentSourceId);
+    if (!removalAccount) { updateRemovalAvailability(); return; }
+    dialog.dataset.sourceId = removalAccount.sourceId;
+    document.getElementById('remove-account-name').textContent = removalAccount.nickname;
+    var currentName = document.getElementById('remove-account-current-name');
+    currentName.hidden = !removalAccount.currentNickname || removalAccount.currentNickname === removalAccount.nickname;
+    currentName.textContent = currentName.hidden ? '' : '当前主页昵称：' + removalAccount.currentNickname;
+    document.getElementById('remove-account-profile').href = removalAccount.profileUrl;
+    document.getElementById('remove-account-homepage').textContent = removalAccount.profileUrl;
+    document.getElementById('remove-account-collected-at').textContent = document.getElementById('data-freshness').textContent;
+    document.getElementById('remove-account-confirm-text').textContent = '我确认移除“' + removalAccount.nickname + '”这一个账号';
+    confirmation.checked = false;
+    updateConfirmation();
+    dialog.showModal();
+    document.body.classList.add('account-modal-open');
+    document.getElementById('remove-account-cancel').focus();
+  });
+  confirmation.addEventListener('change', updateConfirmation);
+  document.getElementById('remove-account-dialog-close').addEventListener('click', closeDialog);
+  document.getElementById('remove-account-cancel').addEventListener('click', closeDialog);
+  dialog.addEventListener('close', function() {
+    document.body.classList.remove('account-modal-open');
+    (trigger.disabled ? document.getElementById('add-account-button') : trigger).focus();
+  });
+  submit.addEventListener('click', function(event) {
+    if (!updateConfirmation()) { event.preventDefault(); return; }
+    var pending = { userId: removalAccount.userId, nickname: removalAccount.nickname };
+    try { localStorage.setItem(storageKey, JSON.stringify(pending)); } catch (error) { /* 可继续使用 */ }
+    showPending(pending);
+    closeDialog();
+  });
+  document.getElementById('remove-account-pending-dismiss').addEventListener('click', function() {
+    try { localStorage.removeItem(storageKey); } catch (error) { /* 仍可关闭当前提示 */ }
+    document.getElementById('remove-account-pending').hidden = true;
+  });
+
+  try {
+    var pending = JSON.parse(localStorage.getItem(storageKey) || 'null');
+    if (pending && typeof pending.userId === 'string' && /^[a-f0-9]{24}$/.test(pending.userId)) {
       showPending({ userId: pending.userId, nickname: validateAccountNickname(pending.nickname) });
     }
   } catch (error) { /* 忽略过期或不可用的本地草稿 */ }
