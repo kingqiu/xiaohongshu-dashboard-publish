@@ -6,6 +6,73 @@ var chartTrend = null, chartStructure = null;
 var currentSortKey = 'engage', currentSortBtn = null;
 var refreshStatus = null;
 
+function escapeHTML(value) {
+  return String(value === null || value === undefined ? '' : value).replace(/[&<>"']/g, function(char) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char];
+  });
+}
+
+// 仅解析用户提供的公开主页；短链由后端解析并做最终身份核对。
+function parseAccountInput(input) {
+  var text = String(input || '').trim();
+  if (!text) throw new Error('请粘贴账号主页链接。');
+  if (text.length > 2048) throw new Error('分享文本过长，请只粘贴主页链接。');
+  if (/^[a-f0-9]{24}$/i.test(text)) {
+    var uid = text.toLowerCase();
+    return { url: 'https://www.xiaohongshu.com/user/profile/' + uid, userId: uid, isShortLink: false };
+  }
+  var links = text.match(/https?:\/\/[^\s<>"'，。！？、；：（）【】「」]+/gi) || [];
+  if (links.length !== 1) throw new Error('请保留一个小红书主页链接，或填写 24 位账号 UID。');
+  var raw = links[0].replace(/[)\]}.,;!?]+$/, '');
+  // 检查原始 authority，避免 URL 标准化掩盖 userinfo、端口、反斜杠或伪域名。
+  var authority = raw.match(/^https?:\/\/([^/?#]+)/i);
+  if (!authority || !/^(?:www\.)?(?:xiaohongshu\.com|xhslink\.com)$/i.test(authority[1]) || /[\\\u0000-\u0020\u007f]/.test(raw)) {
+    throw new Error('仅支持小红书或 xhslink.com 链接，请检查地址。');
+  }
+  var url;
+  try { url = new URL(raw); } catch (error) { throw new Error('链接格式不正确，请重新复制主页链接。'); }
+  if (!/^https?:$/.test(url.protocol) || url.username || url.password || url.port) throw new Error('链接包含不支持的登录信息或端口。');
+  url.protocol = 'https:';
+  var isShort = /^(?:www\.)?xhslink\.com$/.test(url.hostname);
+  var match = url.pathname.match(/^\/user\/profile\/([a-f0-9]{24})\/?$/i);
+  if (isShort) {
+    if (!/^\/(?:[a-z0-9_-]+\/)*[a-z0-9_-]+\/?$/i.test(url.pathname)) throw new Error('短链不完整，请重新复制主页分享链接。');
+  } else {
+    if (!match) throw new Error('请使用账号主页链接，笔记链接不能用于添加账号。');
+    url.pathname = '/user/profile/' + match[1].toLowerCase();
+  }
+  url.hash = '';
+  return { url: url.href, userId: isShort ? null : match[1].toLowerCase(), isShortLink: isShort };
+}
+
+function validateAccountNickname(value) {
+  var nickname = String(value || '').trim();
+  if (!nickname) throw new Error('请填写主页上显示的昵称。');
+  if (nickname.length > 80 || /[\u0000-\u001f\u007f\u2028\u2029]/.test(String(value))) throw new Error('昵称最多 80 个字符，且不能包含换行。');
+  return nickname;
+}
+
+function findMonitoredAccount(userId) {
+  if (!userId) return null;
+  return XHS_SOURCES.find(function(src) {
+    var meta = window[src.metaVar] || {};
+    return String(meta.source_user_id || src.source_user_id || '').toLowerCase() === userId.toLowerCase();
+  }) || null;
+}
+
+function buildAccountIssueUrl(profileUrl, nickname) {
+  var url = new URL('https://github.com/kingqiu/xiaohongshu-dashboard/issues/new');
+  url.searchParams.set('title', '添加监测账号：' + nickname);
+  url.searchParams.set('body', '<!-- xhs-monitor-request:v1 -->\n### 账号主页\n' + profileUrl + '\n\n### 核对昵称\n' + nickname);
+  return url.href;
+}
+
+function accountProgressUrl(nickname) {
+  var url = new URL('https://github.com/kingqiu/xiaohongshu-dashboard/issues');
+  url.searchParams.set('q', 'is:issue in:title 添加监测账号：' + nickname);
+  return url.href;
+}
+
 function isValidDataDate(value) {
   if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
   var date = new Date(value + 'T00:00:00Z');
@@ -458,15 +525,15 @@ function sortTable(key, btn) {
 
     return '<tr class="' + (i < 3 ? 'top-row' : '') + '">'
       + '<td style="color:#555">' + (i+1) + '</td>'
-      + '<td class="note-title">' + d.title + '</td>'
-      + '<td class="num">' + fmt(d.likes) + '</td>'
-      + '<td class="num">' + fmt(d.saves) + '</td>'
-      + '<td class="num">' + fmt(d.comments) + '</td>'
-      + '<td class="num">' + fmt(d.shares) + '</td>'
+      + '<td class="note-title">' + escapeHTML(d.title) + '</td>'
+      + '<td class="num">' + escapeHTML(fmt(d.likes)) + '</td>'
+      + '<td class="num">' + escapeHTML(fmt(d.saves)) + '</td>'
+      + '<td class="num">' + escapeHTML(fmt(d.comments)) + '</td>'
+      + '<td class="num">' + escapeHTML(fmt(d.shares)) + '</td>'
       + '<td class="num">' + (d.save_rate * 100).toFixed(1) + '%</td>'
       + '<td class="num">' + d.quality_index.toFixed(2) + '</td>'
-      + '<td class="num ' + scoreColor + '">' + d.score + '</td>'
-      + '<td style="color:#555">' + d.date + '</td>'
+      + '<td class="num ' + scoreColor + '">' + escapeHTML(d.score) + '</td>'
+      + '<td style="color:#555">' + escapeHTML(d.date) + '</td>'
       + '</tr>';
   }).join('');
 }
@@ -477,27 +544,27 @@ function renderProfileInfoCard(meta, noteCount) {
   if (!container) return;
 
   if (!meta || !meta.nickname) {
-    container.innerHTML = '<p style="font-size:13px;color:#666;margin-bottom:16px">共 ' + noteCount + ' 篇笔记</p>';
+    container.innerHTML = '<p style="font-size:13px;color:#666;margin-bottom:16px">共 ' + escapeHTML(noteCount) + ' 篇笔记</p>';
     return;
   }
 
-  var avatarChar = meta.nickname.charAt(0);
+  var avatarChar = String(meta.nickname).charAt(0);
   var t = meta.profile_tags || {};
 
   var html = '<div class="profile-info-card">'
     + '<div class="profile-main">'
     + '<div class="profile-left">'
-    + '<div class="avatar">' + avatarChar + '</div>'
+    + '<div class="avatar">' + escapeHTML(avatarChar) + '</div>'
     + '<div class="profile-info">'
-    + '<h2>' + meta.nickname + '</h2>'
+    + '<h2>' + escapeHTML(meta.nickname) + '</h2>'
     + '<div class="profile-meta-row">';
 
-  if (meta.xhs_id) html += '<span>小红书号 ' + meta.xhs_id + '</span>';
-  if (meta.location) html += '<span>IP属地 ' + meta.location + '</span>';
+  if (meta.xhs_id) html += '<span>小红书号 ' + escapeHTML(meta.xhs_id) + '</span>';
+  if (meta.location) html += '<span>IP属地 ' + escapeHTML(meta.location) + '</span>';
 
   html += '</div>';
 
-  if (meta.bio) html += '<div class="profile-bio">' + meta.bio + '</div>';
+  if (meta.bio) html += '<div class="profile-bio">' + escapeHTML(meta.bio) + '</div>';
 
   html += '</div></div>'  // close .profile-info, .profile-left
     + '<div class="profile-stats">';
@@ -512,7 +579,7 @@ function renderProfileInfoCard(meta, noteCount) {
   stats.forEach(function(s) {
     if (s.num === undefined || s.num === null) return;
     html += '<div class="profile-stat-item">'
-      + '<div class="profile-stat-num' + (s.accent ? ' accent' : '') + '">' + fmt(s.num) + '</div>'
+      + '<div class="profile-stat-num' + (s.accent ? ' accent' : '') + '">' + escapeHTML(fmt(s.num)) + '</div>'
       + '<div class="profile-stat-label">' + s.label + '</div>'
       + '</div>';
   });
@@ -523,16 +590,16 @@ function renderProfileInfoCard(meta, noteCount) {
   if (t.follower_tier || t.content_format) {
     html += '<div class="profile-badges">';
     if (t.follower_tier) {
-      html += '<span class="pbadge pbadge-tier">🧑 ' + t.follower_tier;
+      html += '<span class="pbadge pbadge-tier">🧑 ' + escapeHTML(t.follower_tier);
       if (meta.followers !== undefined && meta.followers !== null) {
-        if (meta.followers < 1000) html += ' <1k粉';
-        else if (meta.followers < 10000) html += ' ' + fmt(meta.followers) + '粉';
-        else html += ' ' + fmt(meta.followers) + '粉';
+        if (meta.followers < 1000) html += ' &lt;1k粉';
+        else if (meta.followers < 10000) html += ' ' + escapeHTML(fmt(meta.followers)) + '粉';
+        else html += ' ' + escapeHTML(fmt(meta.followers)) + '粉';
       }
       html += '</span>';
     }
     if (t.content_format) {
-      html += '<span class="pbadge pbadge-format">📄 ' + t.content_format + '</span>';
+      html += '<span class="pbadge pbadge-format">📄 ' + escapeHTML(t.content_format) + '</span>';
     }
     html += '</div>';
   }
@@ -598,7 +665,7 @@ function renderTagPanel(meta) {
         html += '<div class="tag-attr-name">' + field.label + '</div>';
         html += '<div class="tag-val">';
         if (val && val !== '未知' && val !== 'null') {
-          html += '<span class="tag-pill">' + val + '</span>';
+          html += '<span class="tag-pill">' + escapeHTML(val) + '</span>';
         }
         html += '</div>';
       } else {
@@ -613,7 +680,7 @@ function renderTagPanel(meta) {
   html += '</div>';  // close .tag-grid
 
   // 打标时间
-  html += '<div class="tag-footer">打标时间：' + (t.tagged_at || '未知') + ' · 由 GLM + 量化指标自动生成（v2.0）</div>';
+  html += '<div class="tag-footer">打标时间：' + escapeHTML(t.tagged_at || '未知') + ' · 由 GLM + 量化指标自动生成（v2.0）</div>';
   html += '</div>';  // close .tag-panel
   container.innerHTML = html;
 }
@@ -640,12 +707,12 @@ function renderTagPanelV1Fallback(container, t) {
     var val = t[def.key];
     if (!val || val === '未知' || val === 'null') return;
     html += '<span style="display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:500;white-space:nowrap;background:rgba(100,100,100,0.15);color:#9ca3af;border:1px solid #444">'
-          + def.icon + ' ' + def.label + '：' + val
+          + def.icon + ' ' + def.label + '：' + escapeHTML(val)
           + '</span>';
   });
 
   html += '</div>';  // close .tag-v1-fallback
-  html += '<div class="tag-footer">打标时间：' + (t.tagged_at || '未知') + ' · 由 GLM + 量化指标自动生成（v1.0）</div>';
+  html += '<div class="tag-footer">打标时间：' + escapeHTML(t.tagged_at || '未知') + ' · 由 GLM + 量化指标自动生成（v1.0）</div>';
   html += '</div>';  // close .tag-panel
   container.innerHTML = html;
 }
@@ -704,7 +771,7 @@ function renderGrowthChart(sourceId) {
       return s.label + ': ' + history[0][s.key];
     }).join('　');
     document.getElementById('growth-legend').innerHTML =
-      '<div style="color:#555;font-size:12px;text-align:center;width:100%">当前仅有起点数据（' + history[0].date + '）· ' + singleInfo + '<br>每周刷新后将展示成长曲线</div>';
+      '<div style="color:#555;font-size:12px;text-align:center;width:100%">当前仅有起点数据（' + escapeHTML(history[0].date) + '）· ' + escapeHTML(singleInfo) + '<br>每周刷新后将展示成长曲线</div>';
   } else {
     document.getElementById('growth-legend').innerHTML = '';
   }
@@ -776,3 +843,121 @@ function renderGrowthChart(sourceId) {
   }).join('');
   document.getElementById('growth-legend').innerHTML = legendHtml;
 }
+
+// ─── 添加监测账号：只准备请求，GitHub 页面由用户最终确认提交 ───
+(function initAccountManager() {
+  var dialog = document.getElementById('account-dialog');
+  var trigger = document.getElementById('add-account-button');
+  if (!dialog || !trigger) return;
+  var homepage = document.getElementById('account-homepage');
+  var nicknameInput = document.getElementById('account-nickname');
+  var confirmation = document.getElementById('account-confirm');
+  var submit = document.getElementById('account-submit');
+  var profileLink = document.getElementById('account-profile-link');
+  var storageKey = 'xhs-pending-account-v1';
+  var parsed = null;
+  var duplicate = null;
+
+  function showPending(pending) {
+    var banner = document.getElementById('account-pending');
+    if (!pending || findMonitoredAccount(pending.userId)) {
+      banner.hidden = true;
+      if (pending) {
+        try { localStorage.removeItem(storageKey); } catch (error) { /* 存储不可用不影响添加 */ }
+      }
+      return;
+    }
+    document.getElementById('account-pending-text').textContent = '“' + pending.nickname + '” 尚未确认结果。';
+    document.getElementById('account-progress-link').href = accountProgressUrl(pending.nickname);
+    banner.hidden = false;
+  }
+
+  function update(showErrors) {
+    var errorMessage = '';
+    var nickname = '';
+    parsed = null;
+    duplicate = null;
+    try { parsed = parseAccountInput(homepage.value); }
+    catch (error) { if (homepage.value.trim() || showErrors) errorMessage = error.message; }
+    homepage.setAttribute('aria-invalid', homepage.value.trim() && !parsed ? 'true' : 'false');
+    try { nickname = validateAccountNickname(nicknameInput.value); }
+    catch (error) { if (!errorMessage && (nicknameInput.value || showErrors)) errorMessage = error.message; }
+    nicknameInput.setAttribute('aria-invalid', nicknameInput.value && !nickname ? 'true' : 'false');
+
+    if (parsed) duplicate = findMonitoredAccount(parsed.userId);
+    document.getElementById('account-review').hidden = !parsed;
+    document.getElementById('account-duplicate').hidden = !duplicate;
+    document.getElementById('account-confirm-label').hidden = !!duplicate;
+    if (parsed) {
+      profileLink.href = parsed.url;
+      document.getElementById('account-profile-detail').textContent = parsed.isShortLink
+        ? '这是分享短链。打开后请确认进入目标账号主页；提交后会再次核对。'
+        : '请核对主页名称，并确认填写的昵称与主页一致。';
+    } else {
+      profileLink.removeAttribute('href');
+    }
+    if (duplicate) {
+      document.getElementById('account-duplicate-text').textContent = '“' + duplicate.label + '” 已在监测，无需重复添加。';
+      errorMessage = '';
+    }
+    document.getElementById('account-validation').textContent = errorMessage;
+    var ready = parsed && nickname && confirmation.checked && !duplicate;
+    submit.hidden = !!duplicate;
+    submit.setAttribute('aria-disabled', ready ? 'false' : 'true');
+    submit.tabIndex = ready ? 0 : -1;
+    if (ready) submit.href = buildAccountIssueUrl(parsed.url, nickname);
+    else submit.removeAttribute('href');
+    return ready ? { userId: parsed.userId, nickname: nickname } : null;
+  }
+
+  function closeDialog() { dialog.close(); }
+  trigger.addEventListener('click', function() {
+    update(false);
+    dialog.showModal();
+    document.body.classList.add('account-modal-open');
+    homepage.focus();
+  });
+  document.getElementById('account-dialog-close').addEventListener('click', closeDialog);
+  document.getElementById('account-cancel').addEventListener('click', closeDialog);
+  dialog.addEventListener('close', function() {
+    document.body.classList.remove('account-modal-open');
+    trigger.focus();
+  });
+  [homepage, nicknameInput].forEach(function(input) {
+    input.addEventListener('input', function() { confirmation.checked = false; update(false); });
+  });
+  confirmation.addEventListener('change', function() { update(false); });
+  document.getElementById('account-switch').addEventListener('click', function() {
+    if (!duplicate) return;
+    document.getElementById('source-select').value = duplicate.id;
+    loadSource(duplicate.id);
+    closeDialog();
+  });
+  document.getElementById('account-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+    if (update(true)) submit.click();
+    else if (!parsed) homepage.focus();
+    else if (!nicknameInput.value.trim()) nicknameInput.focus();
+    else confirmation.focus();
+  });
+  submit.addEventListener('click', function(event) {
+    var pending = update(true);
+    if (!pending) { event.preventDefault(); return; }
+    // 仅保存待添加 UID 和昵称；打开预填页不代表请求已提交。
+    try { localStorage.setItem(storageKey, JSON.stringify(pending)); } catch (error) { /* 可继续使用 */ }
+    showPending(pending);
+    closeDialog();
+  });
+
+  document.getElementById('account-pending-dismiss').addEventListener('click', function() {
+    try { localStorage.removeItem(storageKey); } catch (error) { /* 仍可关闭当前提示 */ }
+    document.getElementById('account-pending').hidden = true;
+  });
+
+  try {
+    var pending = JSON.parse(localStorage.getItem(storageKey) || 'null');
+    if (pending && (pending.userId === null || /^[a-f0-9]{24}$/.test(pending.userId))) {
+      showPending({ userId: pending.userId, nickname: validateAccountNickname(pending.nickname) });
+    }
+  } catch (error) { /* 忽略过期或不可用的本地草稿 */ }
+})();

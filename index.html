@@ -12,6 +12,34 @@ h1{font-size:20px;font-weight:600;color:#fff;margin-bottom:4px}
 .source-select{background:#1a1a1a;border:1px solid #2a2a2a;color:#e0e0e0;font-size:13px;padding:6px 12px;border-radius:6px;cursor:pointer;outline:none}
 .source-select:hover{border-color:#555}
 .source-select:focus{border-color:#ff2442}
+.header-actions{display:flex;align-items:center;gap:8px;min-width:0}
+.account-button{display:inline-flex;align-items:center;justify-content:center;background:#222;border:1px solid #444;color:#e0e0e0;font:inherit;font-size:13px;padding:7px 12px;border-radius:6px;cursor:pointer;text-decoration:none}
+.account-button:hover{border-color:#888;color:#fff}
+.account-button:focus-visible,.account-link:focus-visible{outline:2px solid #ff6b81;outline-offset:3px}
+.account-button.primary{background:#ff2442;border-color:#ff2442;color:#fff}
+.account-button[aria-disabled="true"]{opacity:.45;cursor:not-allowed}
+.account-pending{font-size:12px;color:#aaa;line-height:1.7;margin-top:10px;overflow-wrap:anywhere}
+.account-link{color:#ff8fa0;text-decoration:underline;text-underline-offset:3px}
+.account-dialog{position:fixed;margin:auto;width:calc(100% - 32px);max-width:520px;max-height:calc(100dvh - 32px);overflow:auto;background:#1a1a1a;color:#e0e0e0;border:1px solid #444;border-radius:12px;padding:24px;box-shadow:0 20px 80px #0009}
+.account-dialog::backdrop{background:#000b}
+body.account-modal-open{overflow:hidden}
+.account-dialog-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:12px}
+.account-dialog h2{font-size:18px;color:#fff}
+.account-close{background:none;border:none;color:#aaa;font-size:24px;line-height:1;padding:4px 7px;cursor:pointer;border-radius:4px}
+.account-close:focus-visible{outline:2px solid #ff6b81}
+.account-help{font-size:12px;color:#aaa;line-height:1.7;margin-bottom:20px}
+.account-field{display:block;font-size:13px;margin-bottom:6px;color:#ddd}
+.account-input{display:block;width:100%;font:inherit;font-size:14px;color:#eee;background:#101010;border:1px solid #444;border-radius:6px;padding:10px 12px;line-height:1.6;resize:vertical}
+.account-input:focus{outline:2px solid #ff6b81;outline-offset:1px}
+.account-input[aria-invalid="true"]{border-color:#ff8fa0}
+.account-field-help{font-size:12px;color:#888;line-height:1.6;margin:5px 0 16px}
+.account-validation{font-size:12px;color:#ff9bad;line-height:1.6;min-height:20px;margin-bottom:8px;overflow-wrap:anywhere}
+.account-review{font-size:13px;line-height:1.7;padding:12px;background:#111;border:1px solid #333;border-radius:6px;margin-bottom:16px}
+.account-review p{color:#aaa;font-size:12px;margin-top:4px;overflow-wrap:anywhere}
+.account-confirm{display:flex;gap:9px;align-items:flex-start;font-size:13px;line-height:1.6;margin-top:12px;cursor:pointer}
+.account-confirm input{margin-top:4px;accent-color:#ff2442;flex-shrink:0}
+.account-dialog-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+.account-dialog [hidden],.account-pending[hidden]{display:none}
 .subtitle{font-size:13px;color:#666;margin-bottom:16px}
 .data-freshness{font-size:12px;line-height:1.7;color:#aaa;margin:10px 0 16px;padding:10px 12px;border:1px solid #333;border-radius:6px}
 .data-freshness.is-warning{color:#facc78;background:#2a2217;border-color:#624d25}
@@ -219,6 +247,10 @@ tr:hover td{background:#222}
 
   /* header：账号选择器换行 */
   .header-row { flex-wrap: wrap; gap: 8px; }
+  .header-actions{width:100%}
+  .source-select{min-width:0;flex:1}
+  .account-dialog{padding:20px 16px}
+  .account-dialog-actions .account-button{flex:1}
 
   /* 周筛选按钮更小 */
   .week-btn { font-size: 10px; padding: 3px 7px; }
@@ -236,8 +268,47 @@ tr:hover td{background:#222}
 </style>
 </head>
 <body>
-<div class="header-row"><h1>小红书数据看板</h1><select id="source-select" class="source-select"></select></div>
+<div class="header-row">
+  <h1>小红书数据看板</h1>
+  <div class="header-actions">
+    <select id="source-select" class="source-select" aria-label="选择监测账号"></select>
+    <button id="add-account-button" class="account-button" type="button">＋ 添加账号</button>
+  </div>
+</div>
+<div id="account-pending" class="account-pending" role="status" aria-live="polite" hidden>
+  <span id="account-pending-text"></span> <a id="account-progress-link" class="account-link" target="_blank" rel="noopener noreferrer">查看添加进度</a>
+  <button id="account-pending-dismiss" class="account-close" type="button" aria-label="关闭添加进度提示">×</button>
+</div>
 <div id="data-freshness" class="data-freshness" role="status" aria-live="polite">正在确认数据时间…</div>
+<dialog id="account-dialog" class="account-dialog" aria-labelledby="account-dialog-title" aria-describedby="account-dialog-help">
+  <div class="account-dialog-heading">
+    <h2 id="account-dialog-title">添加监测账号</h2>
+    <button id="account-dialog-close" class="account-close" type="button" aria-label="关闭添加账号">×</button>
+  </div>
+  <p id="account-dialog-help" class="account-help">下一步会打开 GitHub，登录后确认提交；首次采集通过后自动加入，每周日更新。</p>
+  <form id="account-form" novalidate>
+    <label class="account-field" for="account-homepage">主页链接</label>
+    <textarea id="account-homepage" class="account-input" rows="2" maxlength="2048" placeholder="粘贴小红书主页链接或分享文本" aria-describedby="account-homepage-help account-validation" spellcheck="false" autocomplete="off" required></textarea>
+    <p id="account-homepage-help" class="account-field-help">从账号主页复制分享链接，直接粘贴即可。请使用主页链接，而非单篇笔记。</p>
+    <label class="account-field" for="account-nickname">核对昵称</label>
+    <input id="account-nickname" class="account-input" type="text" maxlength="80" placeholder="填写主页上显示的昵称" aria-describedby="account-nickname-help account-validation" autocomplete="off" required>
+    <p id="account-nickname-help" class="account-field-help">用于首次采集时核对账号，请与主页昵称一致。</p>
+    <p id="account-validation" class="account-validation" role="status" aria-live="polite"></p>
+    <div id="account-review" class="account-review" hidden>
+      <a id="account-profile-link" class="account-link" target="_blank" rel="noopener noreferrer">打开主页核对 ↗</a>
+      <p id="account-profile-detail"></p>
+      <label id="account-confirm-label" class="account-confirm"><input id="account-confirm" type="checkbox">我已打开主页，确认这是要监测的账号</label>
+    </div>
+    <div id="account-duplicate" class="account-review" hidden>
+      <p id="account-duplicate-text"></p>
+      <button id="account-switch" class="account-button" type="button">查看该账号</button>
+    </div>
+    <div class="account-dialog-actions">
+      <button id="account-cancel" class="account-button" type="button">取消</button>
+      <a id="account-submit" class="account-button primary" target="_blank" rel="noopener noreferrer" aria-disabled="true" tabindex="-1">前往确认添加 ↗</a>
+    </div>
+  </form>
+</dialog>
 <div id="profile-info-card"></div>
 <div class="week-bar">
   <label>按周筛选：</label>
