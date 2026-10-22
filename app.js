@@ -4,6 +4,54 @@ var currentMeta = null;
 var currentSourceId = null;
 var chartTrend = null, chartStructure = null;
 var currentSortKey = 'engage', currentSortBtn = null;
+var refreshStatus = null;
+
+function isValidDataDate(value) {
+  if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+  var date = new Date(value + 'T00:00:00Z');
+  return !isNaN(date.getTime()) && date.toISOString().slice(0, 10) === value;
+}
+
+function renderDataFreshness(sourceId) {
+  var banner = document.getElementById('data-freshness');
+  var src = XHS_SOURCES.find(function(s) { return s.id === sourceId; });
+  if (!banner || !src) return;
+
+  var account = refreshStatus && refreshStatus.accounts && refreshStatus.accounts[sourceId];
+  var successAt = account && account.last_success_at;
+  var successTime = typeof successAt === 'string' && isValidDataDate(successAt.slice(0, 10))
+    ? Date.parse(successAt) : NaN;
+  var history = window[src.metaVar.replace('_META', '_HISTORY')] || [];
+  var historyDates = history.map(function(h) { return h.date; }).filter(isValidDataDate).sort();
+  var historyDate = historyDates[historyDates.length - 1];
+  var asOfTime, message;
+
+  if (isFinite(successTime)) {
+    asOfTime = successTime;
+    message = '最近成功采集：' + new Date(successTime).toLocaleString('zh-CN', {
+      timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit',
+      hour: '2-digit', minute: '2-digit', hour12: false
+    }) + '（北京时间）';
+  } else if (historyDate) {
+    asOfTime = Date.parse(historyDate + 'T00:00:00+08:00');
+    message = '历史快照截至 ' + historyDate + '（精确采集时间未记录）';
+  } else {
+    asOfTime = NaN;
+    message = '尚无可验证的采集时间，请勿按当前数据解读';
+  }
+
+  var stale = isFinite(asOfTime) && Date.now() - asOfTime > 8 * 86400000;
+  var failed = account && (account.status === 'failed' || account.status === 'failure');
+  if (stale) message += '；当前数据已过期';
+  if (failed) message += '；最近刷新失败';
+  else if (account && (account.status === 'skipped' || account.status === 'skip')) message += '；最近刷新已跳过';
+  else if (!account) message += '；最近刷新状态无法确认';
+
+  var invalidDates = (window[src.dataVar] || []).filter(function(d) { return !isValidDataDate(d.date); }).length;
+  if (invalidDates) message += '；' + invalidDates + ' 条笔记日期异常，已排除周分组与日期趋势';
+  banner.textContent = message;
+  banner.className = 'data-freshness' + (stale || failed || !isFinite(asOfTime) || invalidDates ? ' is-warning' : '');
+}
 
 // ─── 标签体系 2.0：6 大类 15 维映射 ─────────────────────────
 var TAG_CATEGORIES = [
@@ -71,6 +119,16 @@ function safeDestroyChart(chartRef, canvasId) {
     loadSource(this.value);
   });
   loadSource(XHS_SOURCES[0].id);
+  fetch('sources/refresh_status.json', { cache: 'no-store' })
+    .then(function(response) {
+      if (!response.ok) throw new Error('刷新状态不可用');
+      return response.json();
+    })
+    .then(function(status) {
+      refreshStatus = status && typeof status.accounts === 'object' ? status : null;
+      renderDataFreshness(currentSourceId);
+    })
+    .catch(function() { renderDataFreshness(currentSourceId); });
 })();
 
 function loadSource(sourceId) {
@@ -80,6 +138,7 @@ function loadSource(sourceId) {
   currentSourceId = sourceId;
   allData = window[src.dataVar];
   currentMeta = window[src.metaVar] || null;
+  renderDataFreshness(sourceId);
 
   // 重置周筛选
   currentData = allData;
@@ -124,6 +183,7 @@ function rebuildWeekButtons() {
   var weeks = {};
   allData.forEach(function(d) {
     var wk = isoWeek(d.date);
+    if (!wk) return;
     weeks[wk] = (weeks[wk] || 0) + 1;
   });
   var sorted = Object.keys(weeks).sort();
@@ -142,6 +202,7 @@ function rebuildWeekButtons() {
 }
 
 function isoWeek(dateStr) {
+  if (!isValidDataDate(dateStr)) return null;
   var d = new Date(dateStr);
   var jan4 = new Date(d.getFullYear(), 0, 4);
   var startOfWeek1 = new Date(jan4);
@@ -238,10 +299,25 @@ function render() {
 
   // 智能分析
   var analysisBody = document.getElementById('analysis-body');
+  var analysisFreshness = document.getElementById('analysis-freshness');
   if (currentMeta && currentMeta.analysis) {
     analysisBody.textContent = currentMeta.analysis;
+    if (analysisFreshness) {
+      var analysisAt = currentMeta.analysis_updated_at;
+      var analysisTime = typeof analysisAt === 'string' && isValidDataDate(analysisAt.slice(0, 10))
+        ? Date.parse(analysisAt) : NaN;
+      var regenerated = currentMeta.analysis_status === 'regenerated' && isFinite(analysisTime);
+      analysisFreshness.className = 'analysis-footer' + (regenerated ? '' : ' is-historical');
+      analysisFreshness.textContent = regenerated
+        ? '由 AI 基于公开数据生成 · 生成时间：' + new Date(analysisTime).toLocaleString('zh-CN', {
+          timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit',
+          hour: '2-digit', minute: '2-digit', hour12: false
+        }) + '（北京时间）'
+        : '历史分析，未按本次采集重算';
+    }
   } else {
     analysisBody.textContent = '暂无分析数据';
+    if (analysisFreshness) analysisFreshness.textContent = '';
   }
 
   // 区块 6：标签体系 2.0
@@ -258,7 +334,8 @@ function render() {
 
   // 图表1: 互动量趋势（堆叠柱状图）
   try {
-    var sorted = data.slice().sort(function(a,b){ return a.date.localeCompare(b.date); });
+    var sorted = data.filter(function(d) { return isValidDataDate(d.date); })
+      .sort(function(a,b){ return a.date.localeCompare(b.date); });
     var labels = sorted.map(function(d){ return d.date.slice(5); });
 
     var trendData = {
@@ -598,6 +675,7 @@ function renderGrowthChart(sourceId) {
 
   var histVar = src.metaVar.replace('_META', '_HISTORY');  // e.g. LIANGKEBAN_HISTORY
   var history = window[histVar];
+  if (history) history = history.filter(function(h) { return isValidDataDate(h.date); });
 
   var ctx = document.getElementById('chart-growth');
   if (!ctx) return;

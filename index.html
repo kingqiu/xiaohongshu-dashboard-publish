@@ -13,6 +13,8 @@ h1{font-size:20px;font-weight:600;color:#fff;margin-bottom:4px}
 .source-select:hover{border-color:#555}
 .source-select:focus{border-color:#ff2442}
 .subtitle{font-size:13px;color:#666;margin-bottom:16px}
+.data-freshness{font-size:12px;line-height:1.7;color:#aaa;margin:10px 0 16px;padding:10px 12px;border:1px solid #333;border-radius:6px}
+.data-freshness.is-warning{color:#facc78;background:#2a2217;border-color:#624d25}
 .week-bar{display:flex;align-items:center;gap:10px;margin-bottom:20px;flex-wrap:wrap}
 .week-bar label{font-size:12px;color:#888}
 .week-btn{background:#1a1a1a;border:1px solid #2a2a2a;color:#888;font-size:11px;padding:4px 10px;border-radius:4px;cursor:pointer}
@@ -32,6 +34,7 @@ h1{font-size:20px;font-weight:600;color:#fff;margin-bottom:4px}
 .analysis-title{font-size:14px;font-weight:600;color:#ccc;margin-bottom:12px;padding-left:12px}
 .analysis-body{font-size:13px;color:#bbb;line-height:1.8;padding-left:12px}
 .analysis-footer{font-size:11px;color:#555;margin-top:12px;padding-left:12px}
+.analysis-footer.is-historical{color:#c49652}
 /* ── 区块 2：账号基础信息卡片（v2.0） ── */
 .profile-info-card{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;padding:24px 28px;margin-bottom:20px;position:relative;overflow:hidden}
 .profile-info-card::before{content:'';position:absolute;top:-80px;right:-40px;width:260px;height:260px;background:radial-gradient(circle,rgba(255,36,66,0.05) 0%,transparent 70%);pointer-events:none}
@@ -234,6 +237,7 @@ tr:hover td{background:#222}
 </head>
 <body>
 <div class="header-row"><h1>小红书数据看板</h1><select id="source-select" class="source-select"></select></div>
+<div id="data-freshness" class="data-freshness" role="status" aria-live="polite">正在确认数据时间…</div>
 <div id="profile-info-card"></div>
 <div class="week-bar">
   <label>按周筛选：</label>
@@ -270,7 +274,7 @@ tr:hover td{background:#222}
 <div class="analysis-card" id="analysis-card">
   <div class="analysis-title">🤖 智能分析</div>
   <div class="analysis-body" id="analysis-body">暂无分析数据</div>
-  <div class="analysis-footer">由 AI 基于公开数据生成</div>
+  <div class="analysis-footer" id="analysis-freshness">由 AI 基于公开数据生成</div>
 </div>
 <div id="tag-panel"></div>
 <div class="table-card">

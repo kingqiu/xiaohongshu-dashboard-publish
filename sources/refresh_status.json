@@ -1,0 +1,160 @@
+{
+  "schema_version": 1,
+  "attempted_at": "2026-10-22T13:43:57+00:00",
+  "run_url": "https://github.com/kingqiu/xiaohongshu-dashboard/actions/runs/39789407563",
+  "ready_to_publish": true,
+  "status": "ready",
+  "accounts": {
+    "liangkeban": {
+      "id": "liangkeban",
+      "label": "两克伴",
+      "status": "ok",
+      "glm_rerun": false,
+      "engagement_change": 0.0,
+      "stages": {
+        "collect": {
+          "status": "ok"
+        },
+        "convert": {
+          "status": "ok"
+        },
+        "history": {
+          "status": "ok"
+        },
+        "publish": {
+          "status": "ready"
+        },
+        "metrics": {
+          "status": "ok"
+        },
+        "glm": {
+          "status": "skipped",
+          "reason": "未启用可选 GLM 或互动变化未达阈值"
+        }
+      },
+      "collected_at": "2026-10-22T21:43:50+08:00",
+      "note_count": 20,
+      "latest_note_date": "2026-10-16",
+      "last_success_at": "2026-10-22T21:43:50+08:00"
+    },
+    "caiwenjing": {
+      "id": "caiwenjing",
+      "label": "蔡文静",
+      "status": "ok",
+      "glm_rerun": false,
+      "engagement_change": 0.0007841497203199331,
+      "stages": {
+        "collect": {
+          "status": "ok"
+        },
+        "convert": {
+          "status": "ok"
+        },
+        "history": {
+          "status": "ok"
+        },
+        "publish": {
+          "status": "ready"
+        },
+        "metrics": {
+          "status": "ok"
+        },
+        "glm": {
+          "status": "skipped",
+          "reason": "未启用可选 GLM 或互动变化未达阈值"
+        }
+      },
+      "collected_at": "2026-10-22T21:43:52+08:00",
+      "note_count": 20,
+      "latest_note_date": "2026-10-21",
+      "last_success_at": "2026-10-22T21:43:52+08:00"
+    },
+    "chenzihaha": {
+      "id": "chenzihaha",
+      "label": "陈紫haha",
+      "status": "ok",
+      "glm_rerun": false,
+      "engagement_change": 0.0009258306758563934,
+      "stages": {
+        "collect": {
+          "status": "ok"
+        },
+        "convert": {
+          "status": "ok"
+        },
+        "history": {
+          "status": "ok"
+        },
+        "publish": {
+          "status": "ready"
+        },
+        "metrics": {
+          "status": "ok"
+        },
+        "glm": {
+          "status": "skipped",
+          "reason": "未启用可选 GLM 或互动变化未达阈值"
+        }
+      },
+      "collected_at": "2026-10-22T21:43:54+08:00",
+      "note_count": 20,
+      "latest_note_date": "2026-10-22",
+      "last_success_at": "2026-10-22T21:43:54+08:00"
+    },
+    "zhangzhala": {
+      "id": "zhangzhala",
+      "label": "张咋啦",
+      "status": "ok",
+      "glm_rerun": false,
+      "engagement_change": 5.6448699421965315e-06,
+      "stages": {
+        "collect": {
+          "status": "ok"
+        },
+        "convert": {
+          "status": "ok"
+        },
+        "history": {
+          "status": "ok"
+        },
+        "publish": {
+          "status": "ready"
+        },
+        "metrics": {
+          "status": "ok"
+        },
+        "glm": {
+          "status": "skipped",
+          "reason": "未启用可选 GLM 或互动变化未达阈值"
+        }
+      },
+      "collected_at": "2026-10-22T21:43:57+08:00",
+      "note_count": 20,
+      "latest_note_date": "2026-09-07",
+      "last_success_at": "2026-10-22T21:43:57+08:00"
+    },
+    "lumoseducation": {
+      "id": "lumoseducation",
+      "label": "LUMOS EDUCATION",
+      "status": "skipped",
+      "glm_rerun": false,
+      "engagement_change": 0.0,
+      "stages": {
+        "collect": {
+          "status": "not_run"
+        },
+        "convert": {
+          "status": "not_run"
+        },
+        "history": {
+          "status": "not_run"
+        },
+        "publish": {
+          "status": "not_run"
+        }
+      },
+      "reason": "user_id 未配置",
+      "last_success_at": null
+    }
+  }
+}
