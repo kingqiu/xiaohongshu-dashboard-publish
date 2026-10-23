@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "attempted_at": "2026-10-22T13:56:37+00:00",
-  "run_url": "https://github.com/kingqiu/xiaohongshu-dashboard/actions/runs/39791333619",
+  "attempted_at": "2026-10-23T01:15:02+00:00",
+  "run_url": "https://github.com/kingqiu/xiaohongshu-dashboard/actions/runs/39882900224",
   "ready_to_publish": true,
   "status": "ready",
   "accounts": {
@@ -164,6 +164,43 @@
       "note_count": 20,
       "latest_note_date": "2026-10-09",
       "last_success_at": "2026-10-22T21:56:37+08:00"
+    },
+    "xhs_685bb673000000001d01426c": {
+      "id": "xhs_685bb673000000001d01426c",
+      "label": "聚衣堂服饰",
+      "status": "ok",
+      "glm_rerun": false,
+      "engagement_change": 1.0,
+      "stages": {
+        "collect": {
+          "status": "ok"
+        },
+        "convert": {
+          "status": "ok"
+        },
+        "history": {
+          "status": "ok"
+        },
+        "publish": {
+          "status": "ready"
+        },
+        "metrics": {
+          "status": "ok"
+        },
+        "glm": {
+          "status": "skipped",
+          "reason": "未启用可选 GLM 或互动变化未达阈值"
+        }
+      },
+      "collected_at": "2026-10-23T09:15:01+08:00",
+      "note_count": 20,
+      "latest_note_date": "2026-10-22",
+      "last_success_at": "2026-10-23T09:15:01+08:00",
+      "run_url": "https://github.com/kingqiu/xiaohongshu-dashboard/actions/runs/39882900224"
     }
-  }
+  },
+  "operation": "add_account",
+  "updated_account_ids": [
+    "xhs_685bb673000000001d01426c"
+  ]
 }
