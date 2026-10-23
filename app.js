@@ -5,6 +5,7 @@ var currentSourceId = null;
 var chartTrend = null, chartStructure = null;
 var currentSortKey = 'engage', currentSortBtn = null;
 var refreshStatus = null;
+var accountSourceListeners = [];
 
 function escapeHTML(value) {
   return String(value === null || value === undefined ? '' : value).replace(/[&<>"']/g, function(char) {
@@ -938,14 +939,23 @@ function renderGrowthChart(sourceId) {
 
   function showPending(pending) {
     var banner = document.getElementById('account-pending');
-    if (!pending || findMonitoredAccount(pending.userId)) {
+    var completed = pending && findMonitoredAccount(pending.userId);
+    // 分享短链尚无 UID：只认提交后新增、昵称唯一且已有验证数据的账号。
+    if (pending && !pending.userId && Array.isArray(pending.knownSourceIds)) {
+      var matches = XHS_SOURCES.filter(function(src) {
+        return pending.knownSourceIds.indexOf(src.id) === -1 && src.label === pending.nickname
+          && monitoredAccountDetails(src.id);
+      });
+      completed = matches.length === 1;
+    }
+    if (!pending || completed) {
       banner.hidden = true;
       if (pending) {
         try { localStorage.removeItem(storageKey); } catch (error) { /* 存储不可用不影响添加 */ }
       }
       return;
     }
-    document.getElementById('account-pending-text').textContent = '“' + pending.nickname + '” 尚未确认结果。';
+    document.getElementById('account-pending-text').textContent = '“' + pending.nickname + '” 尚未确认结果，发布完成后会自动更新账号列表。';
     document.getElementById('account-progress-link').href = accountProgressUrl(pending.nickname);
     banner.hidden = false;
   }
@@ -1022,6 +1032,7 @@ function renderGrowthChart(sourceId) {
   submit.addEventListener('click', function(event) {
     var pending = update(true);
     if (!pending) { event.preventDefault(); return; }
+    if (!pending.userId) pending.knownSourceIds = XHS_SOURCES.map(function(src) { return src.id; });
     // 仅保存待添加 UID 和昵称；打开预填页不代表请求已提交。
     try { localStorage.setItem(storageKey, JSON.stringify(pending)); } catch (error) { /* 可继续使用 */ }
     showPending(pending);
@@ -1036,9 +1047,15 @@ function renderGrowthChart(sourceId) {
   try {
     var pending = JSON.parse(localStorage.getItem(storageKey) || 'null');
     if (pending && (pending.userId === null || /^[a-f0-9]{24}$/.test(pending.userId))) {
-      showPending({ userId: pending.userId, nickname: validateAccountNickname(pending.nickname) });
+      pending.nickname = validateAccountNickname(pending.nickname);
+      showPending(pending);
     }
   } catch (error) { /* 忽略过期或不可用的本地草稿 */ }
+  accountSourceListeners.push(function() {
+    try { showPending(JSON.parse(localStorage.getItem(storageKey) || 'null')); }
+    catch (error) { /* 存储不可用不影响账号列表 */ }
+    if (dialog.open) update(false);
+  });
 })();
 
 // ─── 移除监测账号：固定核对对象，打开申请不会改变当前列表 ───
@@ -1122,4 +1139,142 @@ function renderGrowthChart(sourceId) {
       showPending({ userId: pending.userId, nickname: validateAccountNickname(pending.nickname) });
     }
   } catch (error) { /* 忽略过期或不可用的本地草稿 */ }
+  accountSourceListeners.push(function() {
+    try { showPending(JSON.parse(localStorage.getItem(storageKey) || 'null')); }
+    catch (error) { /* 存储不可用不影响账号列表 */ }
+    if (dialog.open) updateConfirmation();
+  });
+})();
+
+// 已打开的页面也会同步发布结果；只请求静态文件，不触发采集或修改账号。
+(function initAccountSourceSync() {
+  var inFlight = false;
+  var sequence = 0;
+  var pendingStatusIds = new Set();
+
+  function freshUrl(path) {
+    return path + '?sync=' + Date.now() + '-' + (++sequence);
+  }
+
+  function fetchFresh(path, read) {
+    var controller = new AbortController();
+    var timer = setTimeout(function() { controller.abort(); }, 10000);
+    return fetch(freshUrl(path), { cache: 'no-store', signal: controller.signal })
+      .then(function(response) {
+        if (!response.ok) throw new Error('发布文件暂不可用');
+        return response[read]();
+      }).finally(function() { clearTimeout(timer); });
+  }
+
+  function parseRegistry(text) {
+    // 注册表由 add_account.py 生成 JSON；只解析数据，绝不 eval 远端文本。
+    var match = text.match(/^\s*var\s+XHS_SOURCES\s*=\s*(\[[\s\S]*\])\s*;?\s*$/);
+    if (!match) throw new Error('账号列表格式异常');
+    var sources = JSON.parse(match[1]);
+    var ids = new Set(), variables = new Set();
+    sources.forEach(function(src) {
+      if (!src || !/^[A-Za-z_][A-Za-z0-9_]*$/.test(src.id) || typeof src.label !== 'string'
+          || !/^[A-Za-z_][A-Za-z0-9_]*_DATA$/.test(src.dataVar)
+          || src.metaVar !== src.dataVar.replace(/_DATA$/, '_META')
+          || ids.has(src.id) || variables.has(src.dataVar)) throw new Error('账号列表内容异常');
+      ids.add(src.id);
+      variables.add(src.dataVar);
+    });
+    return sources;
+  }
+
+  function loadScript(path) {
+    return new Promise(function(resolve, reject) {
+      var script = document.createElement('script');
+      var timer = setTimeout(function() { finish(new Error('账号数据加载超时')); }, 10000);
+      function finish(error) {
+        clearTimeout(timer);
+        script.onload = script.onerror = null;
+        script.remove();
+        if (error) reject(error); else resolve();
+      }
+      script.onload = function() { finish(); };
+      script.onerror = function() { finish(new Error('账号数据尚未部署完成')); };
+      script.src = freshUrl(path);
+      document.head.appendChild(script);
+    });
+  }
+
+  function isLoaded(src) {
+    return Array.isArray(window[src.dataVar]) && window[src.metaVar]
+      && Array.isArray(window[src.metaVar.replace(/_META$/, '_HISTORY')]);
+  }
+
+  function ensureLoaded(src) {
+    if (isLoaded(src)) return Promise.resolve();
+    pendingStatusIds.add(src.id);
+    return Promise.all([
+      loadScript('sources/' + src.id + '_data.js'),
+      loadScript('sources/' + src.id + '_history.js')
+    ]).then(function() {
+      if (!isLoaded(src)) throw new Error('账号数据不完整');
+    });
+  }
+
+  function applySources(sources) {
+    var changed = JSON.stringify(sources) !== JSON.stringify(XHS_SOURCES);
+    var current = sources.find(function(src) { return src.id === currentSourceId; });
+    var needsRender = !current || allData !== window[current.dataVar] || currentMeta !== window[current.metaVar];
+    // 等所有新账号数据加载完再替换列表，避免部署过程中出现空白账号。
+    XHS_SOURCES = sources;
+    if (changed) {
+      var select = document.getElementById('source-select');
+      select.innerHTML = '';
+      sources.forEach(function(src) {
+        var option = document.createElement('option');
+        option.value = src.id;
+        option.textContent = src.label;
+        select.appendChild(option);
+      });
+      select.disabled = !sources.length;
+      select.value = current ? current.id : (sources[0] ? sources[0].id : '');
+    }
+    if (needsRender) {
+      if (sources.length) loadSource(current ? current.id : sources[0].id);
+      else renderEmptyDashboard();
+    }
+    accountSourceListeners.forEach(function(listener) { listener(); });
+  }
+
+  function check() {
+    if (inFlight || document.hidden) return;
+    inFlight = true;
+    fetchFresh('sources/registry.js', 'text')
+      .then(parseRegistry)
+      .then(function(sources) {
+        return Promise.all(sources.map(ensureLoaded)).then(function() { applySources(sources); });
+      })
+      .then(function() {
+        if (!pendingStatusIds.size) return;
+        return fetchFresh('sources/refresh_status.json', 'json').then(function(status) {
+          if (!status || !status.accounts) return;
+          if (!refreshStatus) refreshStatus = { accounts: {} };
+          // 只更新刚加载的数据对应的时间，不能把旧账号数据标成最新采集。
+          pendingStatusIds.forEach(function(id) {
+            if (status.accounts[id]) {
+              refreshStatus.accounts[id] = status.accounts[id];
+              pendingStatusIds.delete(id);
+            }
+          });
+          renderDataFreshness(currentSourceId);
+        });
+      })
+      .catch(function() { /* 网络或部署暂未就绪：保留现有内容，下一次检查重试。 */ })
+      .finally(function() { inFlight = false; });
+  }
+
+  window.addEventListener('focus', check);
+  window.addEventListener('pageshow', check);
+  window.addEventListener('online', check);
+  window.addEventListener('storage', function(event) {
+    if (event.key === 'xhs-pending-account-v1' || event.key === 'xhs-pending-removal-v1') check();
+  });
+  document.addEventListener('visibilitychange', check);
+  setInterval(check, 15000);
+  check();
 })();
