@@ -1,13 +1,141 @@
 {
   "schema_version": 1,
-  "attempted_at": "2026-10-23T01:34:04+00:00",
-  "run_url": "https://github.com/kingqiu/xiaohongshu-dashboard/actions/runs/39884709431",
+  "attempted_at": "2026-10-25T16:57:44+00:00",
+  "run_url": "https://github.com/kingqiu/xiaohongshu-dashboard/actions/runs/40214132126",
   "ready_to_publish": true,
   "status": "ready",
   "accounts": {
     "liangkeban": {
       "id": "liangkeban",
       "label": "两克伴",
+      "status": "ok",
+      "glm_rerun": false,
+      "engagement_change": 0.003386004514672686,
+      "stages": {
+        "collect": {
+          "status": "ok"
+        },
+        "convert": {
+          "status": "ok"
+        },
+        "history": {
+          "status": "ok"
+        },
+        "publish": {
+          "status": "ready"
+        },
+        "metrics": {
+          "status": "ok"
+        },
+        "glm": {
+          "status": "skipped",
+          "reason": "未启用可选 GLM 或互动变化未达阈值"
+        }
+      },
+      "collected_at": "2026-10-26T00:57:29+08:00",
+      "note_count": 20,
+      "latest_note_date": "2026-10-16",
+      "last_success_at": "2026-10-26T00:57:29+08:00"
+    },
+    "caiwenjing": {
+      "id": "caiwenjing",
+      "label": "蔡文静",
+      "status": "ok",
+      "glm_rerun": false,
+      "engagement_change": 0.015947214025191725,
+      "stages": {
+        "collect": {
+          "status": "ok"
+        },
+        "convert": {
+          "status": "ok"
+        },
+        "history": {
+          "status": "ok"
+        },
+        "publish": {
+          "status": "ready"
+        },
+        "metrics": {
+          "status": "ok"
+        },
+        "glm": {
+          "status": "skipped",
+          "reason": "未启用可选 GLM 或互动变化未达阈值"
+        }
+      },
+      "collected_at": "2026-10-26T00:57:31+08:00",
+      "note_count": 20,
+      "latest_note_date": "2026-10-25",
+      "last_success_at": "2026-10-26T00:57:31+08:00"
+    },
+    "chenzihaha": {
+      "id": "chenzihaha",
+      "label": "陈紫haha",
+      "status": "ok",
+      "glm_rerun": false,
+      "engagement_change": 0.027923211169284468,
+      "stages": {
+        "collect": {
+          "status": "ok"
+        },
+        "convert": {
+          "status": "ok"
+        },
+        "history": {
+          "status": "ok"
+        },
+        "publish": {
+          "status": "ready"
+        },
+        "metrics": {
+          "status": "ok"
+        },
+        "glm": {
+          "status": "skipped",
+          "reason": "未启用可选 GLM 或互动变化未达阈值"
+        }
+      },
+      "collected_at": "2026-10-26T00:57:33+08:00",
+      "note_count": 20,
+      "latest_note_date": "2026-10-25",
+      "last_success_at": "2026-10-26T00:57:33+08:00"
+    },
+    "zhangzhala": {
+      "id": "zhangzhala",
+      "label": "张咋啦",
+      "status": "ok",
+      "glm_rerun": false,
+      "engagement_change": 0.00250060680639207,
+      "stages": {
+        "collect": {
+          "status": "ok"
+        },
+        "convert": {
+          "status": "ok"
+        },
+        "history": {
+          "status": "ok"
+        },
+        "publish": {
+          "status": "ready"
+        },
+        "metrics": {
+          "status": "ok"
+        },
+        "glm": {
+          "status": "skipped",
+          "reason": "未启用可选 GLM 或互动变化未达阈值"
+        }
+      },
+      "collected_at": "2026-10-26T00:57:35+08:00",
+      "note_count": 20,
+      "latest_note_date": "2026-09-07",
+      "last_success_at": "2026-10-26T00:57:35+08:00"
+    },
+    "lumoseducation": {
+      "id": "lumoseducation",
+      "label": "LUMOS EDUCATION",
       "status": "ok",
       "glm_rerun": false,
       "engagement_change": 0.0,
@@ -32,145 +160,17 @@
           "reason": "未启用可选 GLM 或互动变化未达阈值"
         }
       },
-      "collected_at": "2026-10-22T21:56:28+08:00",
-      "note_count": 20,
-      "latest_note_date": "2026-10-16",
-      "last_success_at": "2026-10-22T21:56:28+08:00"
-    },
-    "caiwenjing": {
-      "id": "caiwenjing",
-      "label": "蔡文静",
-      "status": "ok",
-      "glm_rerun": false,
-      "engagement_change": 0.00013058921855411618,
-      "stages": {
-        "collect": {
-          "status": "ok"
-        },
-        "convert": {
-          "status": "ok"
-        },
-        "history": {
-          "status": "ok"
-        },
-        "publish": {
-          "status": "ready"
-        },
-        "metrics": {
-          "status": "ok"
-        },
-        "glm": {
-          "status": "skipped",
-          "reason": "未启用可选 GLM 或互动变化未达阈值"
-        }
-      },
-      "collected_at": "2026-10-22T21:56:30+08:00",
-      "note_count": 20,
-      "latest_note_date": "2026-10-21",
-      "last_success_at": "2026-10-22T21:56:30+08:00"
-    },
-    "chenzihaha": {
-      "id": "chenzihaha",
-      "label": "陈紫haha",
-      "status": "ok",
-      "glm_rerun": false,
-      "engagement_change": 0.0011305241521068858,
-      "stages": {
-        "collect": {
-          "status": "ok"
-        },
-        "convert": {
-          "status": "ok"
-        },
-        "history": {
-          "status": "ok"
-        },
-        "publish": {
-          "status": "ready"
-        },
-        "metrics": {
-          "status": "ok"
-        },
-        "glm": {
-          "status": "skipped",
-          "reason": "未启用可选 GLM 或互动变化未达阈值"
-        }
-      },
-      "collected_at": "2026-10-22T21:56:32+08:00",
-      "note_count": 20,
-      "latest_note_date": "2026-10-22",
-      "last_success_at": "2026-10-22T21:56:32+08:00"
-    },
-    "zhangzhala": {
-      "id": "zhangzhala",
-      "label": "张咋啦",
-      "status": "ok",
-      "glm_rerun": false,
-      "engagement_change": 2.257935231127895e-05,
-      "stages": {
-        "collect": {
-          "status": "ok"
-        },
-        "convert": {
-          "status": "ok"
-        },
-        "history": {
-          "status": "ok"
-        },
-        "publish": {
-          "status": "ready"
-        },
-        "metrics": {
-          "status": "ok"
-        },
-        "glm": {
-          "status": "skipped",
-          "reason": "未启用可选 GLM 或互动变化未达阈值"
-        }
-      },
-      "collected_at": "2026-10-22T21:56:34+08:00",
-      "note_count": 20,
-      "latest_note_date": "2026-09-07",
-      "last_success_at": "2026-10-22T21:56:34+08:00"
-    },
-    "lumoseducation": {
-      "id": "lumoseducation",
-      "label": "LUMOS EDUCATION",
-      "status": "ok",
-      "glm_rerun": false,
-      "engagement_change": 0.06017191977077364,
-      "stages": {
-        "collect": {
-          "status": "ok"
-        },
-        "convert": {
-          "status": "ok"
-        },
-        "history": {
-          "status": "ok"
-        },
-        "publish": {
-          "status": "ready"
-        },
-        "metrics": {
-          "status": "ok"
-        },
-        "glm": {
-          "status": "skipped",
-          "reason": "未启用可选 GLM 或互动变化未达阈值"
-        }
-      },
-      "collected_at": "2026-10-22T21:56:37+08:00",
+      "collected_at": "2026-10-26T00:57:38+08:00",
       "note_count": 20,
       "latest_note_date": "2026-10-09",
-      "last_success_at": "2026-10-22T21:56:37+08:00"
+      "last_success_at": "2026-10-26T00:57:38+08:00"
     },
     "xhs_685bb673000000001d01426c": {
       "id": "xhs_685bb673000000001d01426c",
       "label": "聚衣堂服饰",
       "status": "ok",
       "glm_rerun": false,
-      "engagement_change": 1.0,
+      "engagement_change": 0.11627906976744186,
       "stages": {
         "collect": {
           "status": "ok"
@@ -188,22 +188,20 @@
           "status": "ok"
         },
         "glm": {
-          "status": "skipped",
-          "reason": "未启用可选 GLM 或互动变化未达阈值"
+          "status": "failed"
         }
       },
-      "collected_at": "2026-10-23T09:15:01+08:00",
+      "collected_at": "2026-10-26T00:57:40+08:00",
       "note_count": 20,
-      "latest_note_date": "2026-10-22",
-      "last_success_at": "2026-10-23T09:15:01+08:00",
-      "run_url": "https://github.com/kingqiu/xiaohongshu-dashboard/actions/runs/39882900224"
+      "latest_note_date": "2026-10-25",
+      "last_success_at": "2026-10-26T00:57:40+08:00"
     },
     "xhs_5d0b7f67000000001003a07c": {
       "id": "xhs_5d0b7f67000000001003a07c",
       "label": "浙江聚衣堂服饰有限公司",
       "status": "ok",
       "glm_rerun": false,
-      "engagement_change": 1.0,
+      "engagement_change": 0.0,
       "stages": {
         "collect": {
           "status": "ok"
@@ -225,15 +223,10 @@
           "reason": "未启用可选 GLM 或互动变化未达阈值"
         }
       },
-      "collected_at": "2026-10-23T09:34:04+08:00",
+      "collected_at": "2026-10-26T00:57:44+08:00",
       "note_count": 20,
       "latest_note_date": "2025-05-22",
-      "last_success_at": "2026-10-23T09:34:04+08:00",
-      "run_url": "https://github.com/kingqiu/xiaohongshu-dashboard/actions/runs/39884709431"
+      "last_success_at": "2026-10-26T00:57:44+08:00"
     }
-  },
-  "operation": "add_account",
-  "updated_account_ids": [
-    "xhs_5d0b7f67000000001003a07c"
-  ]
+  }
 }

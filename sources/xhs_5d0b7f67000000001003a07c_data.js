@@ -337,7 +337,7 @@ var XHS_5D0B7F67000000001003A07C_META = {
   "avg_quality_index": 1.92,
   "avg_comment_ratio": 0.019,
   "avg_score": 41,
-  "collected_at": "2026-10-23T09:34:04+08:00",
+  "collected_at": "2026-10-26T00:57:44+08:00",
   "source_user_id": "5d0b7f67000000001003a07c",
   "profile_tags": {
     "content_theme": {
@@ -369,6 +369,6 @@ var XHS_5D0B7F67000000001003A07C_META = {
     },
     "follower_tier": "素人",
     "content_format": "图文为主",
-    "tagged_at": "2026-10-23"
+    "tagged_at": "2026-10-26"
   }
 };

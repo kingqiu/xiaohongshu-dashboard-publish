@@ -13,5 +13,13 @@ var LUMOSEDUCATION_HISTORY = [
     "collected": 430,
     "notes": 99,
     "collected_at": "2026-10-22T21:56:37+08:00"
+  },
+  {
+    "date": "2026-10-26",
+    "fans": 398,
+    "liked": 2069,
+    "collected": 430,
+    "notes": 99,
+    "collected_at": "2026-10-26T00:57:38+08:00"
   }
 ];

@@ -6,12 +6,12 @@ var LIANGKEBAN_DATA = [
     "impressions": null,
     "views": null,
     "ctr": null,
-    "likes": 349,
+    "likes": 348,
     "comments": 10,
     "saves": 515,
     "fans": null,
     "shares": 107,
-    "save_rate": 0.525,
+    "save_rate": 0.526,
     "quality_index": 1.36,
     "score": 59
   },
@@ -104,12 +104,12 @@ var LIANGKEBAN_DATA = [
     "ctr": null,
     "likes": 14,
     "comments": 0,
-    "saves": 11,
+    "saves": 13,
     "fans": null,
-    "shares": 3,
-    "save_rate": 0.39299999999999996,
-    "quality_index": 1.32,
-    "score": 57
+    "shares": 5,
+    "save_rate": 0.406,
+    "quality_index": 1.47,
+    "score": 64
   },
   {
     "title": "开启国庆长假模式",
@@ -198,14 +198,14 @@ var LIANGKEBAN_DATA = [
     "impressions": null,
     "views": null,
     "ctr": null,
-    "likes": 23,
+    "likes": 24,
     "comments": 1,
     "saves": 18,
     "fans": null,
-    "shares": 4,
-    "save_rate": 0.391,
-    "quality_index": 1.33,
-    "score": 57
+    "shares": 5,
+    "save_rate": 0.375,
+    "quality_index": 1.38,
+    "score": 60
   },
   {
     "title": "当AI参与改进自己，留给人类还有多少时间？",
@@ -250,10 +250,10 @@ var LIANGKEBAN_DATA = [
     "comments": 0,
     "saves": 1,
     "fans": null,
-    "shares": 1,
-    "save_rate": 0.14300000000000002,
-    "quality_index": 1.43,
-    "score": 47
+    "shares": 2,
+    "save_rate": 0.125,
+    "quality_index": 1.75,
+    "score": 50
   },
   {
     "title": "AIBP与FDE：AI时代的双生角色",
@@ -327,17 +327,17 @@ var LIANGKEBAN_META = {
   "bio": "探寻智能商业的魅力",
   "location": "Zhejiang",
   "followers": 384,
-  "following": 71,
+  "following": 72,
   "notes_count": 180,
   "total_likes": 2727,
-  "total_saves": 4125,
-  "total_likes_and_saves": 6852,
-  "total_engagement": 1772,
-  "avg_save_rate": 0.335,
-  "avg_quality_index": 1.23,
+  "total_saves": 4129,
+  "total_likes_and_saves": 6856,
+  "total_engagement": 1778,
+  "avg_save_rate": 0.33399999999999996,
+  "avg_quality_index": 1.26,
   "avg_comment_ratio": 0.011000000000000001,
-  "avg_score": 42,
-  "collected_at": "2026-10-22T21:56:28+08:00",
+  "avg_score": 43,
+  "collected_at": "2026-10-26T00:57:29+08:00",
   "source_user_id": "5e8b46cd00000000010068d9",
   "analysis": "「两克伴」账号的爆款内容呈现明显的技术与知识分享属性，特别是实操教程类笔记（如「nano banana pro」）收藏率高达52.2%，互动质量指数与综合评分均领先。互动结构以收藏型为主（平均36.4%），辅以高互动质量（平均1.35），但评论/互动比仅4.5%，可见用户偏好快速获取信息而非深度讨论。\n\n建议：1. 持续深化「技巧/教程」类内容，强化步骤可视化，提升收藏转化；2. 尝试在教程结尾设置开放性问题或投票，引导评论互动，平衡收藏与讨论比例。",
   "analysis_status": "preserved",
@@ -371,6 +371,6 @@ var LIANGKEBAN_META = {
     },
     "follower_tier": "素人",
     "content_format": "图文为主",
-    "tagged_at": "2026-10-22"
+    "tagged_at": "2026-10-26"
   }
 };
