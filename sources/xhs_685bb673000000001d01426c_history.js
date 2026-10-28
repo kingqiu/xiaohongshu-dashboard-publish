@@ -14,5 +14,13 @@ var XHS_685BB673000000001D01426C_HISTORY = [
     "collected": 85,
     "notes": 375,
     "collected_at": "2026-10-26T00:57:40+08:00"
+  },
+  {
+    "date": "2026-10-28",
+    "fans": 388,
+    "liked": 243,
+    "collected": 86,
+    "notes": 379,
+    "collected_at": "2026-10-28T12:00:50+08:00"
   }
 ];

@@ -337,8 +337,12 @@ var XHS_5D0B7F67000000001003A07C_META = {
   "avg_quality_index": 1.92,
   "avg_comment_ratio": 0.019,
   "avg_score": 41,
-  "collected_at": "2026-10-26T00:57:44+08:00",
+  "collected_at": "2026-10-28T12:00:59+08:00",
   "source_user_id": "5d0b7f67000000001003a07c",
+  "analysis": "该账号内容呈现明显的「故事化+活动型」爆款特征。TOP笔记中，「采年货1218拿货节」和「聚衣堂人的故事」等兼具时效性与情感共鸣的内容表现突出，收藏率（22.6%-36.8%）远超行业均值，说明用户偏好实用性及品牌深度内容。互动结构以「收藏型」为主（平均12.5%），但TOP笔记的「评论型」互动质量高（如「聚衣堂人的故事」互动质量2.11），显示深度内容能激发用户参与。建议：1. 加大故事化内容占比，强化品牌人设，如「聚衣堂人的故事」模式可系列化；2. 结合「限时活动」提升收藏转化，如「1688拿货节」可定期举办，并强化收藏引导。",
+  "analysis_updated_at": "2026-10-28T04:00:59+00:00",
+  "analysis_status": "regenerated",
+  "analysis_attempted_at": "2026-10-28T04:00:59+00:00",
   "profile_tags": {
     "content_theme": {
       "primary_vertical": "未知",
@@ -369,6 +373,6 @@ var XHS_5D0B7F67000000001003A07C_META = {
     },
     "follower_tier": "素人",
     "content_format": "图文为主",
-    "tagged_at": "2026-10-26"
+    "tagged_at": "2026-10-28"
   }
 };

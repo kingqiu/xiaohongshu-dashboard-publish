@@ -56,5 +56,13 @@ var CAIWENJING_HISTORY = [
     "collected": 1228769,
     "notes": 516,
     "collected_at": "2026-10-26T00:57:31+08:00"
+  },
+  {
+    "date": "2026-10-28",
+    "fans": 2628820,
+    "liked": 5375952,
+    "collected": 1233438,
+    "notes": 516,
+    "collected_at": "2026-10-28T12:00:40+08:00"
   }
 ];

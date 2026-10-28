@@ -134,14 +134,14 @@ var LUMOSEDUCATION_DATA = [
     "impressions": null,
     "views": null,
     "ctr": null,
-    "likes": 5,
-    "comments": 8,
+    "likes": 6,
+    "comments": 10,
     "saves": 2,
     "fans": null,
     "shares": 4,
-    "save_rate": 0.105,
-    "quality_index": 2.89,
-    "score": 79
+    "save_rate": 0.091,
+    "quality_index": 2.91,
+    "score": 78
   },
   {
     "title": "🥇12年级English Advanced，从13到19/20",
@@ -326,18 +326,18 @@ var LUMOSEDUCATION_META = {
   "xhs_id": 95858510538,
   "bio": "🥇最强课程：AEAS，English，Chemistry，Physics，Biology，Japanese，French\n📚K-12：英语｜数学｜物理｜化学｜生物｜🇯🇵日语｜🇫🇷法语｜科学\n👩‍🏫 小班｜1对1｜系统教学｜用心付出\n\n📍Chatswood火车站旁",
   "location": "Australia",
-  "followers": 398,
+  "followers": 400,
   "following": 32,
   "notes_count": 99,
-  "total_likes": 2069,
+  "total_likes": 2071,
   "total_saves": 430,
-  "total_likes_and_saves": 2499,
-  "total_engagement": 328,
+  "total_likes_and_saves": 2501,
+  "total_engagement": 331,
   "avg_save_rate": 0.198,
   "avg_quality_index": 1.53,
-  "avg_comment_ratio": 0.129,
+  "avg_comment_ratio": 0.131,
   "avg_score": 48,
-  "collected_at": "2026-10-26T00:57:38+08:00",
+  "collected_at": "2026-10-28T12:00:48+08:00",
   "source_user_id": "5a9fe1b611be1060320b4dcc",
   "analysis": "LUMOS EDUCATION账号的爆款内容集中于展示「师资团队」（悉尼顶级师资团队笔记出现2次），这类内容平均互动质量指数（2.68）和综合评分（76）远超其他笔记，表明高价值师资介绍能有效吸引粉丝。互动结构上，收藏率（21.9%）高于评论率（8.2%），但TOP笔记均以评论量见长（平均8.2%），显示内容兼具实用性（收藏）和话题性（评论）。\n\n建议：1）持续深化师资团队内容，突出专业背景与教学成果，结合「地域+师资」标签强化搜索曝光；2）增加互动引导，如发起「你希望了解哪个国家教育体系」投票，提升评论率，优化互动结构平衡。",
   "analysis_status": "preserved",
@@ -371,6 +371,6 @@ var LUMOSEDUCATION_META = {
     },
     "follower_tier": "素人",
     "content_format": "图文为主",
-    "tagged_at": "2026-10-26"
+    "tagged_at": "2026-10-28"
   }
 };
