@@ -120,6 +120,57 @@ function isValidDataDate(value) {
   return !isNaN(date.getTime()) && date.toISOString().slice(0, 10) === value;
 }
 
+function renderAnalysis() {
+  var body = document.getElementById('analysis-body');
+  var footer = document.getElementById('analysis-freshness');
+  if (!body || !footer) return;
+  var meta = currentMeta || {};
+  var account = refreshStatus && refreshStatus.accounts && refreshStatus.accounts[currentSourceId];
+  // 只把同一份采集数据的运行状态与当前页面配对，避免混用旧状态。
+  if (account && meta.collected_at && account.collected_at
+      && Date.parse(meta.collected_at) !== Date.parse(account.collected_at)) account = null;
+  var stage = account && account.stages && account.stages.glm;
+  var failed = meta.analysis_status === 'failed' || (stage && stage.status === 'failed');
+  var reasons = {
+    missing_key: '尚未配置智谱 API 密钥，请维护者完成配置。',
+    auth_failed: '智谱服务身份验证失败，请维护者更新有效的 API 密钥。',
+    forbidden: '当前密钥没有调用该模型的权限，请维护者检查授权。',
+    rate_limited: '智谱服务请求受限，请稍后重试或检查服务额度。',
+    service_error: '智谱服务暂时不可用，请稍后重试。',
+    invalid_request: '智谱服务未接受模型或请求参数，请维护者检查配置。',
+    timeout: '分析请求超时，请稍后重试。',
+    network_error: '暂时无法连接智谱服务，请稍后重试。',
+    invalid_response: '智谱服务未返回有效的分析文本，请稍后重试。',
+    invalid_output: '分析结果未通过数据校验，已保留原有数据。',
+    generation_failed: '本次分析生成失败，请维护者查看后台日志。'
+  };
+  var code = meta.analysis_error_code || (stage && stage.error_code);
+  var reason = Object.prototype.hasOwnProperty.call(reasons, code) ? reasons[code] : reasons.generation_failed;
+  var hasAnalysis = typeof meta.analysis === 'string' && meta.analysis.trim()
+    && meta.analysis.indexOf('智能分析生成失败') === -1;
+  footer.className = 'analysis-footer';
+  if (hasAnalysis) {
+    body.textContent = meta.analysis;
+    var at = meta.analysis_updated_at;
+    var time = typeof at === 'string' && isValidDataDate(at.slice(0, 10)) ? Date.parse(at) : NaN;
+    footer.textContent = isFinite(time)
+      ? '由 AI 基于公开数据生成 · 生成时间：' + new Date(time).toLocaleString('zh-CN', {
+        timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit',
+        hour: '2-digit', minute: '2-digit', hour12: false
+      }) + '（北京时间）'
+      : '历史分析，生成时间未记录';
+    if (failed) footer.textContent += '；最近更新失败：' + reason + ' 已保留历史分析，下次数据刷新将自动重试。';
+    else if (meta.analysis_status !== 'regenerated') footer.textContent += '；历史分析，未按本次采集重算';
+    if (failed || meta.analysis_status !== 'regenerated') footer.className += ' is-historical';
+  } else {
+    body.textContent = failed ? '智能分析生成失败：' + reason : '分析尚未生成。';
+    footer.textContent = failed ? '下次数据刷新将自动重试，当前采集数据和指标仍可正常查看。'
+      : '下次数据刷新将自动补生成，无需等待互动量变化。';
+    if (stage && stage.skip_code === 'disabled' && !failed) footer.textContent = '本次运行未启用智能分析；下次启用分析的数据刷新将自动补生成。';
+    footer.className += ' is-historical';
+  }
+}
+
 function renderDataFreshness(sourceId) {
   var banner = document.getElementById('data-freshness');
   var src = XHS_SOURCES.find(function(s) { return s.id === sourceId; });
@@ -235,7 +286,7 @@ function safeDestroyChart(chartRef, canvasId) {
     return;
   }
   loadSource(XHS_SOURCES[0].id);
-  fetch('sources/refresh_status.json', { cache: 'no-store' })
+  fetch('sources/refresh_status.json?sync=' + Date.now(), { cache: 'no-store' })
     .then(function(response) {
       if (!response.ok) throw new Error('刷新状态不可用');
       return response.json();
@@ -243,6 +294,7 @@ function safeDestroyChart(chartRef, canvasId) {
     .then(function(status) {
       refreshStatus = status && typeof status.accounts === 'object' ? status : null;
       renderDataFreshness(currentSourceId);
+      renderAnalysis();
     })
     .catch(function() { renderDataFreshness(currentSourceId); });
 })();
@@ -443,28 +495,7 @@ function render() {
   // 区块 2：账号基础信息卡片
   renderProfileInfoCard(currentMeta, data.length);
 
-  // 智能分析
-  var analysisBody = document.getElementById('analysis-body');
-  var analysisFreshness = document.getElementById('analysis-freshness');
-  if (currentMeta && currentMeta.analysis) {
-    analysisBody.textContent = currentMeta.analysis;
-    if (analysisFreshness) {
-      var analysisAt = currentMeta.analysis_updated_at;
-      var analysisTime = typeof analysisAt === 'string' && isValidDataDate(analysisAt.slice(0, 10))
-        ? Date.parse(analysisAt) : NaN;
-      var regenerated = currentMeta.analysis_status === 'regenerated' && isFinite(analysisTime);
-      analysisFreshness.className = 'analysis-footer' + (regenerated ? '' : ' is-historical');
-      analysisFreshness.textContent = regenerated
-        ? '由 AI 基于公开数据生成 · 生成时间：' + new Date(analysisTime).toLocaleString('zh-CN', {
-          timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit',
-          hour: '2-digit', minute: '2-digit', hour12: false
-        }) + '（北京时间）'
-        : '历史分析，未按本次采集重算';
-    }
-  } else {
-    analysisBody.textContent = '暂无分析数据';
-    if (analysisFreshness) analysisFreshness.textContent = '';
-  }
+  renderAnalysis();
 
   // 区块 6：标签体系 2.0
   renderTagPanel(currentMeta);
@@ -1262,6 +1293,7 @@ function renderGrowthChart(sourceId) {
             }
           });
           renderDataFreshness(currentSourceId);
+          renderAnalysis();
         });
       })
       .catch(function() { /* 网络或部署暂未就绪：保留现有内容，下一次检查重试。 */ })

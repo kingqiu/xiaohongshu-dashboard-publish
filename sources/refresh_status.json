@@ -188,7 +188,9 @@
           "status": "ok"
         },
         "glm": {
-          "status": "failed"
+          "status": "failed",
+          "error_code": "auth_failed",
+          "reason": "智谱服务身份验证失败，请维护者更新有效的 API 密钥。"
         }
       },
       "collected_at": "2026-10-26T00:57:40+08:00",
