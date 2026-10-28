@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "attempted_at": "2026-10-28T04:01:04+00:00",
-  "run_url": "https://github.com/kingqiu/xiaohongshu-dashboard/actions/runs/40629846128",
+  "attempted_at": "2026-10-28T05:11:38+00:00",
+  "run_url": "https://github.com/kingqiu/xiaohongshu-dashboard/actions/runs/40636517890",
   "ready_to_publish": true,
   "status": "ready",
   "accounts": {
@@ -235,6 +235,44 @@
       "note_count": 20,
       "latest_note_date": "2025-05-22",
       "last_success_at": "2026-10-28T12:00:59+08:00"
+    },
+    "xhs_67d3d140000000000a03f5f4": {
+      "id": "xhs_67d3d140000000000a03f5f4",
+      "label": "云感Yoga瑜伽",
+      "status": "ok",
+      "glm_rerun": true,
+      "engagement_change": 1.0,
+      "stages": {
+        "collect": {
+          "status": "ok"
+        },
+        "convert": {
+          "status": "ok"
+        },
+        "history": {
+          "status": "ok"
+        },
+        "publish": {
+          "status": "ready"
+        },
+        "metrics": {
+          "status": "ok"
+        },
+        "glm": {
+          "status": "ok",
+          "attempted_at": "2026-10-28T05:11:34+00:00",
+          "trigger": "missing"
+        }
+      },
+      "collected_at": "2026-10-28T13:11:34+08:00",
+      "note_count": 20,
+      "latest_note_date": "2026-10-28",
+      "last_success_at": "2026-10-28T13:11:34+08:00",
+      "run_url": "https://github.com/kingqiu/xiaohongshu-dashboard/actions/runs/40636517890"
     }
-  }
+  },
+  "operation": "add_account",
+  "updated_account_ids": [
+    "xhs_67d3d140000000000a03f5f4"
+  ]
 }

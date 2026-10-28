@@ -40,5 +40,11 @@ var XHS_SOURCES = [
     "label": "浙江聚衣堂服饰有限公司",
     "dataVar": "XHS_5D0B7F67000000001003A07C_DATA",
     "metaVar": "XHS_5D0B7F67000000001003A07C_META"
+  },
+  {
+    "id": "xhs_67d3d140000000000a03f5f4",
+    "label": "云感Yoga瑜伽",
+    "dataVar": "XHS_67D3D140000000000A03F5F4_DATA",
+    "metaVar": "XHS_67D3D140000000000A03F5F4_META"
   }
 ];
