@@ -337,7 +337,7 @@ var LIANGKEBAN_META = {
   "avg_quality_index": 1.26,
   "avg_comment_ratio": 0.011000000000000001,
   "avg_score": 43,
-  "collected_at": "2026-10-28T12:00:38+08:00",
+  "collected_at": "2026-10-28T13:31:36+08:00",
   "source_user_id": "5e8b46cd00000000010068d9",
   "analysis": "「两克伴」账号的爆款内容呈现明显的技术与知识分享属性，特别是实操教程类笔记（如「nano banana pro」）收藏率高达52.2%，互动质量指数与综合评分均领先。互动结构以收藏型为主（平均36.4%），辅以高互动质量（平均1.35），但评论/互动比仅4.5%，可见用户偏好快速获取信息而非深度讨论。\n\n建议：1. 持续深化「技巧/教程」类内容，强化步骤可视化，提升收藏转化；2. 尝试在教程结尾设置开放性问题或投票，引导评论互动，平衡收藏与讨论比例。",
   "analysis_status": "preserved",
@@ -371,6 +371,8 @@ var LIANGKEBAN_META = {
     },
     "follower_tier": "素人",
     "content_format": "图文为主",
-    "tagged_at": "2026-10-28"
+    "tagged_at": "2026-10-28",
+    "quantified_at": "2026-10-28T05:31:37+00:00",
+    "glm_status": "preserved"
   }
 };

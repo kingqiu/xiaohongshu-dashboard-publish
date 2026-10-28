@@ -337,25 +337,24 @@ var XHS_685BB673000000001D01426C_META = {
   "avg_quality_index": 1.26,
   "avg_comment_ratio": 0.07200000000000001,
   "avg_score": 13,
-  "collected_at": "2026-10-28T12:00:50+08:00",
+  "collected_at": "2026-10-28T13:31:49+08:00",
   "source_user_id": "685bb673000000001d01426c",
   "analysis": "「聚衣堂服饰」账号互动数据显示，**深度揭秘生产源头和供应链优势的内容**是典型爆款特征，如TOP笔记1和2，均以高收藏率（25.8%-55.6%）和综合评分（76-90）突出，证明用户对品牌专业实力的内容需求强烈。互动结构呈现**收藏型为主**（平均收藏率9.1%），评论和分享较低（平均评论/互动比7.2%），反映用户偏好实用性内容。建议：1. **强化供应链故事线**，持续输出工厂、生产流程等深度内容，提升信任背书；2. **增加互动引导**，在揭秘笔记中嵌入提问或投票，激发评论互动，平衡收藏与评论比例。",
+  "analysis_status": "preserved",
   "analysis_updated_at": "2026-10-28T04:00:50+00:00",
-  "analysis_status": "regenerated",
-  "analysis_attempted_at": "2026-10-28T04:00:50+00:00",
   "profile_tags": {
     "content_theme": {
-      "primary_vertical": "未知",
-      "sub_direction": "未知"
+      "primary_vertical": "时尚穿搭",
+      "sub_direction": "品牌工厂"
     },
     "content_style": {
-      "audience_level": "未知",
-      "sentence_pattern": "未知",
-      "tone": "未知"
+      "audience_level": "专业向",
+      "sentence_pattern": "体验型",
+      "tone": "干货严肃"
     },
     "seeding_traits": {
-      "seeding_tendency": "未知",
-      "suitable_ad_type": "未知"
+      "seeding_tendency": "中性分享",
+      "suitable_ad_type": "消费品"
     },
     "engagement_traits": {
       "fan_activity": "高活跃",
@@ -368,11 +367,15 @@ var XHS_685BB673000000001D01426C_META = {
       "engagement_authenticity": "正常"
     },
     "collab_fit": {
-      "recommended_scenario": "未知",
-      "brand_tone_match": "未知"
+      "recommended_scenario": "产品教程",
+      "brand_tone_match": "专业科技品牌"
     },
     "follower_tier": "素人",
     "content_format": "图文为主",
-    "tagged_at": "2026-10-28"
+    "tagged_at": "2026-10-28",
+    "quantified_at": "2026-10-28T05:31:49+00:00",
+    "glm_status": "regenerated",
+    "glm_updated_at": "2026-10-28T05:31:49+00:00",
+    "glm_attempted_at": "2026-10-28T05:31:49+00:00"
   }
 };

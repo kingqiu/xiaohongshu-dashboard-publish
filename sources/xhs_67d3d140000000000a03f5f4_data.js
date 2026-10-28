@@ -32,6 +32,22 @@ var XHS_67D3D140000000000A03F5F4_DATA = [
     "score": 48
   },
   {
+    "title": "阿不是！跑步就该穿这件开衫啊！",
+    "date": "2026-10-28",
+    "type": null,
+    "impressions": null,
+    "views": null,
+    "ctr": null,
+    "likes": 0,
+    "comments": 29,
+    "saves": 0,
+    "fans": null,
+    "shares": 0,
+    "save_rate": 0.0,
+    "quality_index": 4.0,
+    "score": 50
+  },
+  {
     "title": "好爱这种简约又高级的瑜伽裤～舒适又显瘦！",
     "date": "2026-10-28",
     "type": null,
@@ -118,13 +134,13 @@ var XHS_67D3D140000000000A03F5F4_DATA = [
     "impressions": null,
     "views": null,
     "ctr": null,
-    "likes": 1,
+    "likes": 2,
     "comments": 26,
     "saves": 0,
     "fans": null,
     "shares": 0,
     "save_rate": 0.0,
-    "quality_index": 3.89,
+    "quality_index": 3.79,
     "score": 50
   },
   {
@@ -136,12 +152,12 @@ var XHS_67D3D140000000000A03F5F4_DATA = [
     "ctr": null,
     "likes": 0,
     "comments": 29,
-    "saves": 1,
+    "saves": 2,
     "fans": null,
     "shares": 0,
-    "save_rate": 0.033,
-    "quality_index": 3.9,
-    "score": 53
+    "save_rate": 0.065,
+    "quality_index": 3.81,
+    "score": 56
   },
   {
     "title": "自带胸垫的香芋紫 就是秋冬瑜伽的氛围之神",
@@ -302,22 +318,6 @@ var XHS_67D3D140000000000A03F5F4_DATA = [
     "save_rate": 0.0,
     "quality_index": 3.69,
     "score": 50
-  },
-  {
-    "title": "就这个豹纹太香！秋冬加绒这个价格太香",
-    "date": "2026-10-27",
-    "type": null,
-    "impressions": null,
-    "views": null,
-    "ctr": null,
-    "likes": 0,
-    "comments": 0,
-    "saves": 0,
-    "fans": null,
-    "shares": 0,
-    "save_rate": 0.0,
-    "quality_index": 1.0,
-    "score": 0
   }
 ];
 
@@ -326,36 +326,35 @@ var XHS_67D3D140000000000A03F5F4_META = {
   "xhs_id": 27762656782,
   "bio": "📍瑜伽服源头工厂 | 小红书店铺已开\n✔自有车间车工1000人 \n✔50人质检团队 ✔24h发货\n📦支持30天无理由 | 一件也是批发价\n✅来我主页，解锁瑜伽服省钱密码✅",
   "location": "Zhejiang",
-  "followers": 75724,
+  "followers": 75736,
   "following": 0,
-  "notes_count": 13872,
-  "total_likes": 378975,
-  "total_saves": 149203,
-  "total_likes_and_saves": 528178,
-  "total_engagement": 622,
-  "avg_save_rate": 0.026000000000000002,
-  "avg_quality_index": 2.95,
-  "avg_comment_ratio": 0.64,
-  "avg_score": 40,
-  "collected_at": "2026-10-28T13:11:34+08:00",
+  "notes_count": 13873,
+  "total_likes": 378988,
+  "total_saves": 149207,
+  "total_likes_and_saves": 528195,
+  "total_engagement": 653,
+  "avg_save_rate": 0.027000000000000003,
+  "avg_quality_index": 3.09,
+  "avg_comment_ratio": 0.6859999999999999,
+  "avg_score": 43,
+  "collected_at": "2026-10-28T13:32:01+08:00",
   "source_user_id": "67d3d140000000000a03f5f4",
   "analysis": "该账号的爆款内容多为穿搭展示类笔记，如撞色套装、香芋紫外套等，互动质量高但收藏率低，反映粉丝更关注视觉呈现和个性表达。互动结构呈现\"评论主导型\"，TOP5笔记中评论占比64%，但收藏率仅2.6%，说明粉丝参与度高但停留较短。策略建议：1. 强化评论互动，如发起\"你最爱哪套穿搭\"话题引导讨论；2. 提升收藏率，可搭配实用教程（如\"3步完成瑜伽裤搭配\"）增强笔记价值感。",
+  "analysis_status": "preserved",
   "analysis_updated_at": "2026-10-28T05:11:34+00:00",
-  "analysis_status": "regenerated",
-  "analysis_attempted_at": "2026-10-28T05:11:34+00:00",
   "profile_tags": {
     "content_theme": {
-      "primary_vertical": "未知",
-      "sub_direction": "未知"
+      "primary_vertical": "时尚穿搭",
+      "sub_direction": "穿搭分享"
     },
     "content_style": {
-      "audience_level": "未知",
-      "sentence_pattern": "未知",
-      "tone": "未知"
+      "audience_level": "小白向",
+      "sentence_pattern": "体验型",
+      "tone": "轻松分享"
     },
     "seeding_traits": {
-      "seeding_tendency": "未知",
-      "suitable_ad_type": "未知"
+      "seeding_tendency": "强种草",
+      "suitable_ad_type": "消费品"
     },
     "engagement_traits": {
       "fan_activity": "低活跃",
@@ -368,11 +367,15 @@ var XHS_67D3D140000000000A03F5F4_META = {
       "engagement_authenticity": "正常"
     },
     "collab_fit": {
-      "recommended_scenario": "未知",
-      "brand_tone_match": "未知"
+      "recommended_scenario": "素人种草",
+      "brand_tone_match": "年轻潮流品牌"
     },
     "follower_tier": "腰部达人",
     "content_format": "图文为主",
-    "tagged_at": "2026-10-28"
+    "tagged_at": "2026-10-28",
+    "quantified_at": "2026-10-28T05:32:01+00:00",
+    "glm_status": "regenerated",
+    "glm_updated_at": "2026-10-28T05:32:01+00:00",
+    "glm_attempted_at": "2026-10-28T05:32:01+00:00"
   }
 };

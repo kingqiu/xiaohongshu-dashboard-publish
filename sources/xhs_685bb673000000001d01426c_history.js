@@ -21,6 +21,6 @@ var XHS_685BB673000000001D01426C_HISTORY = [
     "liked": 243,
     "collected": 86,
     "notes": 379,
-    "collected_at": "2026-10-28T12:00:50+08:00"
+    "collected_at": "2026-10-28T13:31:49+08:00"
   }
 ];

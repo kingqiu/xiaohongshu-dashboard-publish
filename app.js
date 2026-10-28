@@ -120,6 +120,24 @@ function isValidDataDate(value) {
   return !isNaN(date.getTime()) && date.toISOString().slice(0, 10) === value;
 }
 
+function aiFailureReason(code) {
+  var reasons = {
+    missing_key: '尚未配置智谱 API 密钥，请维护者完成配置。',
+    auth_failed: '智谱服务身份验证失败，请维护者更新有效的 API 密钥。',
+    forbidden: '当前密钥没有调用该模型的权限，请维护者检查授权。',
+    rate_limited: '智谱服务请求受限，请稍后重试或检查服务额度。',
+    service_error: '智谱服务暂时不可用，请稍后重试。',
+    invalid_request: '智谱服务未接受模型或请求参数，请维护者检查配置。',
+    timeout: '分析请求超时，请稍后重试。',
+    network_error: '暂时无法连接智谱服务，请稍后重试。',
+    invalid_response: '智谱服务未返回有效的分析文本，请稍后重试。',
+    incomplete_tags: '智谱返回的标签不完整或包含无效字段，将在后续刷新中重试。',
+    invalid_output: '分析结果未通过数据校验，已保留原有数据。',
+    generation_failed: '本次分析生成失败，请维护者查看后台日志。'
+  };
+  return Object.prototype.hasOwnProperty.call(reasons, code) ? reasons[code] : reasons.generation_failed;
+}
+
 function renderAnalysis() {
   var body = document.getElementById('analysis-body');
   var footer = document.getElementById('analysis-freshness');
@@ -131,21 +149,7 @@ function renderAnalysis() {
       && Date.parse(meta.collected_at) !== Date.parse(account.collected_at)) account = null;
   var stage = account && account.stages && account.stages.glm;
   var failed = meta.analysis_status === 'failed' || (stage && stage.status === 'failed');
-  var reasons = {
-    missing_key: '尚未配置智谱 API 密钥，请维护者完成配置。',
-    auth_failed: '智谱服务身份验证失败，请维护者更新有效的 API 密钥。',
-    forbidden: '当前密钥没有调用该模型的权限，请维护者检查授权。',
-    rate_limited: '智谱服务请求受限，请稍后重试或检查服务额度。',
-    service_error: '智谱服务暂时不可用，请稍后重试。',
-    invalid_request: '智谱服务未接受模型或请求参数，请维护者检查配置。',
-    timeout: '分析请求超时，请稍后重试。',
-    network_error: '暂时无法连接智谱服务，请稍后重试。',
-    invalid_response: '智谱服务未返回有效的分析文本，请稍后重试。',
-    invalid_output: '分析结果未通过数据校验，已保留原有数据。',
-    generation_failed: '本次分析生成失败，请维护者查看后台日志。'
-  };
-  var code = meta.analysis_error_code || (stage && stage.error_code);
-  var reason = Object.prototype.hasOwnProperty.call(reasons, code) ? reasons[code] : reasons.generation_failed;
+  var reason = aiFailureReason(meta.analysis_error_code || (stage && stage.error_code));
   var hasAnalysis = typeof meta.analysis === 'string' && meta.analysis.trim()
     && meta.analysis.indexOf('智能分析生成失败') === -1;
   footer.className = 'analysis-footer';
@@ -295,6 +299,7 @@ function safeDestroyChart(chartRef, canvasId) {
       refreshStatus = status && typeof status.accounts === 'object' ? status : null;
       renderDataFreshness(currentSourceId);
       renderAnalysis();
+      renderTagPanel(currentMeta);
     })
     .catch(function() { renderDataFreshness(currentSourceId); });
 })();
@@ -724,19 +729,30 @@ function isV2Tags(tags) {
   return tags && typeof tags.content_theme === 'object' && tags.content_theme !== null;
 }
 
+function usableTag(value) {
+  return typeof value === 'string' && value.trim().length > 0 && value.trim().length <= 120
+    && ['未知', 'null', 'none', 'undefined', '待生成', '未生成', '暂无'].indexOf(value.trim().toLowerCase()) === -1;
+}
+
+function tagTime(value) {
+  if (typeof value !== 'string' || !isValidDataDate(value.slice(0, 10)) || !isFinite(Date.parse(value))) return '';
+  return new Date(value).toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai', year: 'numeric',
+    month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false }) + '（北京时间）';
+}
+
 function renderTagPanel(meta) {
   var container = document.getElementById('tag-panel');
   if (!container) return;
 
-  if (!meta || !meta.profile_tags) {
+  if (!meta) {
     container.innerHTML = '';
     return;
   }
 
-  var t = meta.profile_tags;
+  var t = meta.profile_tags || {};
 
   // v1.0 降级显示
-  if (!isV2Tags(t)) {
+  if (meta.profile_tags && !isV2Tags(t) && typeof t.primary_vertical === 'string') {
     renderTagPanelV1Fallback(container, t);
     return;
   }
@@ -751,14 +767,29 @@ function renderTagPanel(meta) {
     collab_fit: '#fbbf24'
   };
 
+  var filled = 0, aiFilled = 0;
+  TAG_CATEGORIES.forEach(function(cat) {
+    cat.fields.forEach(function(field) {
+      if (usableTag((t[cat.key] || {})[field.key])) {
+        filled++;
+        if (cat.key !== 'engagement_traits' && cat.key !== 'account_health') aiFilled++;
+      }
+    });
+  });
+  var account = refreshStatus && refreshStatus.accounts && refreshStatus.accounts[currentSourceId];
+  if (account && meta.collected_at && account.collected_at
+      && Date.parse(meta.collected_at) !== Date.parse(account.collected_at)) account = null;
+  var stage = account && account.stages && account.stages.tags;
+  var failed = t.glm_status === 'failed' || (stage && stage.status === 'failed');
+  var pending = aiFilled < 9;
+
   var html = '<div class="tag-panel">'
     + '<div class="tag-panel-heading">🏷️ 账号画像标签 · 6 大维度 15 项指标</div>'
-    + '<div class="tag-panel-sub">基于内容语义分析 + 量化指标自动生成的多维标签画像</div>'
+    + '<div class="tag-panel-sub">已生成 ' + filled + '/15 项 · AI 标签 ' + aiFilled + '/9 项，量化标签 ' + (filled - aiFilled) + '/6 项</div>'
     + '<div class="tag-grid">';
 
   TAG_CATEGORIES.forEach(function(cat) {
-    var catData = t[cat.key];
-    if (!catData || typeof catData !== 'object') return;
+    var catData = t[cat.key] || {};
 
     html += '<div class="tag-grid-row ' + cat.cssClass + '">';
     html += '<div class="tag-cat ' + cat.cssClass + '">'
@@ -774,8 +805,10 @@ function renderTagPanel(meta) {
         var val = catData[field.key];
         html += '<div class="tag-attr-name">' + field.label + '</div>';
         html += '<div class="tag-val">';
-        if (val && val !== '未知' && val !== 'null') {
+        if (usableTag(val)) {
           html += '<span class="tag-pill">' + escapeHTML(val) + '</span>';
+        } else {
+          html += '<span class="tag-empty">待生成</span>';
         }
         html += '</div>';
       } else {
@@ -789,8 +822,18 @@ function renderTagPanel(meta) {
 
   html += '</div>';  // close .tag-grid
 
-  // 打标时间
-  html += '<div class="tag-footer">打标时间：' + escapeHTML(t.tagged_at || '未知') + ' · 由 GLM + 量化指标自动生成（v2.0）</div>';
+  var quantified = tagTime(t.quantified_at);
+  var generated = tagTime(t.glm_updated_at);
+  var footer = '量化标签更新：' + (quantified || t.tagged_at || '时间未记录');
+  footer += ' · AI 标签：' + (generated ? '生成于 ' + generated : aiFilled ? '保留历史结果，生成时间未记录' : '尚未生成');
+  html += '<div class="tag-footer">' + escapeHTML(footer) + '</div>';
+  if (failed || pending) {
+    var notice = failed ? 'AI 标签生成失败：' + aiFailureReason(t.glm_error_code || (stage && stage.error_code))
+      : 'AI 标签尚未完整生成。';
+    notice += ' 已保留已有标签；' + (stage && stage.skip_code === 'disabled'
+      ? '下次启用 AI 的数据刷新将自动重试。' : '下次数据刷新将自动补生成或重试。');
+    html += '<div class="tag-status" role="status">' + escapeHTML(notice) + '</div>';
+  }
   html += '</div>';  // close .tag-panel
   container.innerHTML = html;
 }
@@ -1294,6 +1337,7 @@ function renderGrowthChart(sourceId) {
           });
           renderDataFreshness(currentSourceId);
           renderAnalysis();
+          renderTagPanel(currentMeta);
         });
       })
       .catch(function() { /* 网络或部署暂未就绪：保留现有内容，下一次检查重试。 */ })
