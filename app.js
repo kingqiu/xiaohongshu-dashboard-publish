@@ -900,6 +900,15 @@ function renderGrowthChart(sourceId) {
   var ctx = document.getElementById('chart-growth');
   if (!ctx) return;
 
+  var notice = document.getElementById('growth-notice');
+  if (notice) {
+    var singleDay = history && history.length === 1;
+    notice.hidden = !singleDay;
+    notice.textContent = singleDay
+      ? '当前仅有 1 天数据（' + history[0].date + '），图中圆点为首日快照。至少积累 2 个不同日期的数据后，才会显示成长曲线；同一天刷新不会增加时间点。'
+      : '';
+  }
+
   growthChart = safeDestroyChart(growthChart, 'chart-growth');
 
   if (!history || history.length === 0) {
@@ -917,17 +926,6 @@ function renderGrowthChart(sourceId) {
     { key: 'collected', label: '累计收藏',   color: '#10b981' },
     { key: 'notes',     label: '笔记总数',   color: '#a855f7' },
   ];
-
-  // 只有一条数据时提示
-  if (history.length === 1) {
-    var singleInfo = series.map(function(s) {
-      return s.label + ': ' + history[0][s.key];
-    }).join('　');
-    document.getElementById('growth-legend').innerHTML =
-      '<div style="color:#555;font-size:12px;text-align:center;width:100%">当前仅有起点数据（' + escapeHTML(history[0].date) + '）· ' + escapeHTML(singleInfo) + '<br>每周刷新后将展示成长曲线</div>';
-  } else {
-    document.getElementById('growth-legend').innerHTML = '';
-  }
 
   var datasets = series.map(function(s) {
     var values = history.map(function(h) { return h[s.key] || 0; });

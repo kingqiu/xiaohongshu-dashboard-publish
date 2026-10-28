@@ -150,6 +150,7 @@ tr:hover td{background:#222}
 .chart-tab.active{background:#ff2442;color:#fff}
 .chart-wrap-tall{position:relative;height:260px}
 .growth-legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px;justify-content:center}
+.growth-notice{margin-bottom:16px;padding:12px 16px;border:1px solid #3d3548;border-radius:8px;background:#231f29;color:#c4b5fd;font-size:13px;line-height:1.7}
 .growth-legend-item{display:flex;align-items:center;gap:6px;font-size:11px;color:#888}
 .growth-legend-dot{width:10px;height:10px;border-radius:50%}
 @media(max-width:640px){
@@ -380,6 +381,7 @@ tr:hover td{background:#222}
     <div class="chart-wrap"><canvas id="chart-structure"></canvas></div>
   </div>
   <div class="chart-tab-content" id="tab-growth" style="display:none">
+    <div class="growth-notice" id="growth-notice" role="status" hidden></div>
     <div class="chart-wrap-tall"><canvas id="chart-growth"></canvas></div>
     <div class="growth-legend" id="growth-legend"></div>
   </div>
@@ -440,6 +442,6 @@ tr:hover td{background:#222}
 
 
 
-<script src="app.js?v=ac1a99c78424"></script>
+<script src="app.js?v=178858f6a906"></script>
 </body>
 </html>
