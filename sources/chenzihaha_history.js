@@ -65,5 +65,13 @@ var CHENZIHAHA_HISTORY = [
     "collected": 172625,
     "notes": 1481,
     "collected_at": "2026-11-02T02:15:38+08:00"
+  },
+  {
+    "date": "2026-11-16",
+    "fans": 173223,
+    "liked": 1054092,
+    "collected": 172992,
+    "notes": 1488,
+    "collected_at": "2026-11-16T03:14:39+08:00"
   }
 ];
