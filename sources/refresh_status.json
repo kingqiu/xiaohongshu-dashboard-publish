@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "attempted_at": "2026-11-15T19:14:51+00:00",
-  "run_url": "https://github.com/kingqiu/xiaohongshu-dashboard/actions/runs/43751296879",
+  "attempted_at": "2026-11-22T20:09:16+00:00",
+  "run_url": "https://github.com/kingqiu/xiaohongshu-dashboard/actions/runs/45064741039",
   "ready_to_publish": true,
   "status": "ready",
   "accounts": {
@@ -10,7 +10,7 @@
       "label": "两克伴",
       "status": "ok",
       "glm_rerun": false,
-      "engagement_change": 0.03333333333333333,
+      "engagement_change": 0.009770114942528735,
       "stages": {
         "collect": {
           "status": "ok"
@@ -38,17 +38,17 @@
           "reason": "已有完整 AI 标签，保留原有结果"
         }
       },
-      "collected_at": "2026-11-16T03:14:34+08:00",
+      "collected_at": "2026-11-23T04:08:51+08:00",
       "note_count": 20,
-      "latest_note_date": "2026-11-12",
-      "last_success_at": "2026-11-16T03:14:34+08:00"
+      "latest_note_date": "2026-11-20",
+      "last_success_at": "2026-11-23T04:08:51+08:00"
     },
     "caiwenjing": {
       "id": "caiwenjing",
       "label": "蔡文静",
       "status": "ok",
       "glm_rerun": false,
-      "engagement_change": 0.04747327824550868,
+      "engagement_change": 0.03591181708390478,
       "stages": {
         "collect": {
           "status": "ok"
@@ -76,17 +76,17 @@
           "reason": "已有完整 AI 标签，保留原有结果"
         }
       },
-      "collected_at": "2026-11-16T03:14:36+08:00",
+      "collected_at": "2026-11-23T04:08:54+08:00",
       "note_count": 20,
-      "latest_note_date": "2026-11-14",
-      "last_success_at": "2026-11-16T03:14:36+08:00"
+      "latest_note_date": "2026-11-21",
+      "last_success_at": "2026-11-23T04:08:54+08:00"
     },
     "chenzihaha": {
       "id": "chenzihaha",
       "label": "陈紫haha",
       "status": "ok",
       "glm_rerun": false,
-      "engagement_change": 0.08986175115207373,
+      "engagement_change": 0.012658227848101266,
       "stages": {
         "collect": {
           "status": "ok"
@@ -114,17 +114,17 @@
           "reason": "已有完整 AI 标签，保留原有结果"
         }
       },
-      "collected_at": "2026-11-16T03:14:39+08:00",
+      "collected_at": "2026-11-23T04:08:56+08:00",
       "note_count": 20,
-      "latest_note_date": "2026-11-14",
-      "last_success_at": "2026-11-16T03:14:39+08:00"
+      "latest_note_date": "2026-11-20",
+      "last_success_at": "2026-11-23T04:08:56+08:00"
     },
     "zhangzhala": {
       "id": "zhangzhala",
       "label": "张咋啦",
       "status": "ok",
       "glm_rerun": false,
-      "engagement_change": 0.007447392292788908,
+      "engagement_change": 0.0033960292580982234,
       "stages": {
         "collect": {
           "status": "ok"
@@ -152,17 +152,17 @@
           "reason": "已有完整 AI 标签，保留原有结果"
         }
       },
-      "collected_at": "2026-11-16T03:14:41+08:00",
+      "collected_at": "2026-11-23T04:08:59+08:00",
       "note_count": 20,
       "latest_note_date": "2026-09-07",
-      "last_success_at": "2026-11-16T03:14:41+08:00"
+      "last_success_at": "2026-11-23T04:08:59+08:00"
     },
     "lumoseducation": {
       "id": "lumoseducation",
       "label": "LUMOS EDUCATION",
       "status": "ok",
       "glm_rerun": false,
-      "engagement_change": 0.024096385542168676,
+      "engagement_change": 0.011764705882352941,
       "stages": {
         "collect": {
           "status": "ok"
@@ -190,17 +190,17 @@
           "reason": "已有完整 AI 标签，保留原有结果"
         }
       },
-      "collected_at": "2026-11-16T03:14:43+08:00",
+      "collected_at": "2026-11-23T04:09:02+08:00",
       "note_count": 20,
       "latest_note_date": "2026-10-09",
-      "last_success_at": "2026-11-16T03:14:43+08:00"
+      "last_success_at": "2026-11-23T04:09:02+08:00"
     },
     "xhs_685bb673000000001d01426c": {
       "id": "xhs_685bb673000000001d01426c",
       "label": "聚衣堂服饰",
       "status": "ok",
       "glm_rerun": false,
-      "engagement_change": 0.04878048780487805,
+      "engagement_change": 0.06976744186046512,
       "stages": {
         "collect": {
           "status": "ok"
@@ -228,10 +228,10 @@
           "reason": "已有完整 AI 标签，保留原有结果"
         }
       },
-      "collected_at": "2026-11-16T03:14:46+08:00",
+      "collected_at": "2026-11-23T04:09:05+08:00",
       "note_count": 20,
-      "latest_note_date": "2026-11-15",
-      "last_success_at": "2026-11-16T03:14:46+08:00"
+      "latest_note_date": "2026-11-22",
+      "last_success_at": "2026-11-23T04:09:05+08:00"
     },
     "xhs_5d0b7f67000000001003a07c": {
       "id": "xhs_5d0b7f67000000001003a07c",
@@ -266,17 +266,17 @@
           "reason": "已有完整 AI 标签，保留原有结果"
         }
       },
-      "collected_at": "2026-11-16T03:14:48+08:00",
+      "collected_at": "2026-11-23T04:09:08+08:00",
       "note_count": 20,
       "latest_note_date": "2025-05-22",
-      "last_success_at": "2026-11-16T03:14:48+08:00"
+      "last_success_at": "2026-11-23T04:09:08+08:00"
     },
     "xhs_67d3d140000000000a03f5f4": {
       "id": "xhs_67d3d140000000000a03f5f4",
       "label": "云感Yoga瑜伽",
       "status": "ok",
-      "glm_rerun": false,
-      "engagement_change": 0.03177570093457944,
+      "glm_rerun": true,
+      "engagement_change": 0.7228260869565217,
       "stages": {
         "collect": {
           "status": "ok"
@@ -294,9 +294,9 @@
           "status": "ok"
         },
         "glm": {
-          "status": "skipped",
-          "reason": "已有有效分析且互动变化未达阈值",
-          "skip_code": "unchanged"
+          "status": "ok",
+          "attempted_at": "2026-11-22T20:09:11+00:00",
+          "trigger": "metrics_change"
         },
         "tags": {
           "status": "skipped",
@@ -304,10 +304,10 @@
           "reason": "已有完整 AI 标签，保留原有结果"
         }
       },
-      "collected_at": "2026-11-16T03:14:51+08:00",
+      "collected_at": "2026-11-23T04:09:11+08:00",
       "note_count": 20,
-      "latest_note_date": "2026-11-15",
-      "last_success_at": "2026-11-16T03:14:51+08:00"
+      "latest_note_date": "2026-11-22",
+      "last_success_at": "2026-11-23T04:09:11+08:00"
     }
   }
 }

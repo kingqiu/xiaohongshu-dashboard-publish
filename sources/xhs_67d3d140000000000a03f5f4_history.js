@@ -22,5 +22,13 @@ var XHS_67D3D140000000000A03F5F4_HISTORY = [
     "collected": 153072,
     "notes": 14411,
     "collected_at": "2026-11-16T03:14:51+08:00"
+  },
+  {
+    "date": "2026-11-23",
+    "fans": 86329,
+    "liked": 391431,
+    "collected": 153842,
+    "notes": 14614,
+    "collected_at": "2026-11-23T04:09:11+08:00"
   }
 ];

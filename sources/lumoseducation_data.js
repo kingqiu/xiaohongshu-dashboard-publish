@@ -7,13 +7,13 @@ var LUMOSEDUCATION_DATA = [
     "views": null,
     "ctr": null,
     "likes": 11,
-    "comments": 2,
+    "comments": 4,
     "saves": 5,
     "fans": null,
     "shares": 5,
-    "save_rate": 0.217,
-    "quality_index": 1.91,
-    "score": 72
+    "save_rate": 0.2,
+    "quality_index": 2.08,
+    "score": 80
   },
   {
     "title": "🇦🇺 澳大利亚悉尼｜顶级师资团队",
@@ -106,10 +106,10 @@ var LUMOSEDUCATION_DATA = [
     "comments": 4,
     "saves": 1,
     "fans": null,
-    "shares": 1,
-    "save_rate": 0.091,
-    "quality_index": 2.36,
-    "score": 64
+    "shares": 2,
+    "save_rate": 0.083,
+    "quality_index": 2.5,
+    "score": 73
   },
   {
     "title": "数学普娃的进步｜从C1班到82%",
@@ -135,13 +135,13 @@ var LUMOSEDUCATION_DATA = [
     "views": null,
     "ctr": null,
     "likes": 7,
-    "comments": 10,
+    "comments": 11,
     "saves": 2,
     "fans": null,
     "shares": 4,
-    "save_rate": 0.087,
-    "quality_index": 2.83,
-    "score": 76
+    "save_rate": 0.083,
+    "quality_index": 2.88,
+    "score": 77
   },
   {
     "title": "🥇12年级English Advanced，从13到19/20",
@@ -326,18 +326,18 @@ var LUMOSEDUCATION_META = {
   "xhs_id": 95858510538,
   "bio": "🥇最强课程：AEAS，English，Chemistry，Physics，Biology，Japanese，French\n📚K-12：英语｜数学｜物理｜化学｜生物｜🇯🇵日语｜🇫🇷法语｜科学\n👩‍🏫 小班｜1对1｜系统教学｜用心付出\n\n📍Chatswood火车站旁",
   "location": "Australia",
-  "followers": 408,
+  "followers": 410,
   "following": 35,
   "notes_count": 99,
   "total_likes": 2080,
   "total_saves": 432,
   "total_likes_and_saves": 2512,
-  "total_engagement": 340,
-  "avg_save_rate": 0.195,
-  "avg_quality_index": 1.48,
-  "avg_comment_ratio": 0.107,
-  "avg_score": 47,
-  "collected_at": "2026-11-16T03:14:43+08:00",
+  "total_engagement": 344,
+  "avg_save_rate": 0.19399999999999998,
+  "avg_quality_index": 1.5,
+  "avg_comment_ratio": 0.111,
+  "avg_score": 48,
+  "collected_at": "2026-11-23T04:09:02+08:00",
   "source_user_id": "5a9fe1b611be1060320b4dcc",
   "analysis": "LUMOS EDUCATION账号的爆款内容集中于展示「师资团队」（悉尼顶级师资团队笔记出现2次），这类内容平均互动质量指数（2.68）和综合评分（76）远超其他笔记，表明高价值师资介绍能有效吸引粉丝。互动结构上，收藏率（21.9%）高于评论率（8.2%），但TOP笔记均以评论量见长（平均8.2%），显示内容兼具实用性（收藏）和话题性（评论）。\n\n建议：1）持续深化师资团队内容，突出专业背景与教学成果，结合「地域+师资」标签强化搜索曝光；2）增加互动引导，如发起「你希望了解哪个国家教育体系」投票，提升评论率，优化互动结构平衡。",
   "analysis_status": "preserved",
@@ -371,8 +371,8 @@ var LUMOSEDUCATION_META = {
     },
     "follower_tier": "素人",
     "content_format": "图文为主",
-    "tagged_at": "2026-11-16",
-    "quantified_at": "2026-11-15T19:14:43+00:00",
+    "tagged_at": "2026-11-23",
+    "quantified_at": "2026-11-22T20:09:02+00:00",
     "glm_status": "preserved"
   }
 };
